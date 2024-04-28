@@ -29,6 +29,13 @@
         @click="submit"
         >兑换</el-button
       >
+      <div class="surplus" v-if="store.getters.userinfo">
+        <el-tag
+            color="#8166e7"
+            effect="dark">
+          剩余SUPER币 {{ store.getters.userinfo.frequency }}
+        </el-tag>
+      </div>
     </div>
     <LoginDialog :show="loginVisible" @close="loginVisible = false" />
   </div>
@@ -185,5 +192,9 @@ input:focus {
   to {
     transform: scale(1);
   }
+}
+
+.surplus {
+  margin-top: 10px;
 }
 </style>

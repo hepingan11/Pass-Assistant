@@ -69,7 +69,7 @@
           >
         </div>
         <div style="font-size: 12px; color: #b0b0b0">
-          对订单有疑问 可在微信小程序端中联系小程序客服
+          对订单有疑问 可在端中联系小程序客服
         </div>
       </div>
     </div>

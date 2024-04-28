@@ -1,10 +1,14 @@
 <template>
-          <div class="panel-container">
-            <div class="body" v-if="mainPageVisible">
-              <div class="article" v-if="store.getters.userinfo">我要赞助站点运行</div>
+  <div class="panel-container">
+    <div class="body" v-if="mainPageVisible">
+      <div class="article" v-if="store.getters.userinfo">我要赞助站点运行</div>
       <div class="introduce" v-if="store.getters.userinfo">
-        赞赏作者也可获得相应Ai币
+        赞赏作者也可获得相应SUPER币
       </div>
+      <div class="surplus" v-if="store.getters.userinfo">
+        剩余SUPER币 {{ store.getters.userinfo.frequency }}
+      </div>
+      <el-tag color="var(--themeColor1)" class="aiwarning">现在暂不支持RMB购买Ai币，缺币的联系站长qq1973016127</el-tag>
       <ViewState
         class="state"
         v-if="!store.getters.userinfo"
@@ -431,5 +435,14 @@ export default {
   &:hover {
     opacity: 0.9;
   }
+}
+
+.surplus {
+  margin: 10px;
+  color: #7c7c7c;
+}
+
+.aiwarning {
+  color: #ffffff;
 }
 </style>

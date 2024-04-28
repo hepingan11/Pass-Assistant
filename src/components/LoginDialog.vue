@@ -60,7 +60,7 @@
             正在加载中...
           </div>
           <div class="h5 prompt-style" v-if="!promptAnimation">
-            使用微信扫一扫快速登录后使用
+            ！！！微信登录功能暂未上线请选择邮箱登录！！！
           </div>
         </div>
         <!--登录-->
@@ -74,7 +74,7 @@
                 type="text"
                 clearable
                 v-model="emailForm.email"
-                placeholder="请输入邮箱"
+                placeholder="请输入邮箱(注意空格也算字符)"
                 autocomplete="“off”"
               >
                 <template #prefix>

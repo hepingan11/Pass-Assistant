@@ -6,7 +6,7 @@
         class="rechargeButton hidden-xs-only applet"
       >
         <img class="appletIcon" :src="require('../assets/applet.svg')" />
-        <div class="rechargeButtonText themeColorText">微信小程序</div>
+        <div class="rechargeButtonText themeColorText"></div>
       </div>
     </div>
     <div v-if="isHeadNavigation" class="header-center">
@@ -136,7 +136,7 @@
     align-center
   >
     <div class="wxAppletCodeRow">
-      <img class="wxAppletCode" :src="require('../assets/wxAppletCode.jpg')" />
+      <img class="wxAppletCode" :src="require('../assets/passlogo.png')" />
       <div>微信扫一扫</div>
     </div>
   </el-dialog>
@@ -192,10 +192,6 @@ export default defineComponent({
       {
         title: "实验室",
         to: "/laboratory",
-      },
-      {
-        title: "角色",
-        to: "/preset_character",
       },
       {
         title: "收藏",

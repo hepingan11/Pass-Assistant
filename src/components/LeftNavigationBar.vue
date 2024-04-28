@@ -8,7 +8,7 @@
           :src="
           store.getters.userinfo.avatar
             ? imageUrl + store.getters.userinfo.avatar
-            : require('../assets/logoHead.svg')
+            : require('../assets/passlogo.png')
         "
       />
       <div class="surplus" v-if="store.getters.userinfo">
@@ -36,11 +36,11 @@
         <el-avatar
             :size="40"
             :icon="UserFilled"
-            :src="require('../assets/logoHead.svg')"
+            :src="require('../assets/hh.jpg')"
         />
         <div class="bottomRight">
-          <div class="bottomRightName">TIME SEA PLUS</div>
-          <div class="bottomRightEdition">v1.4.1</div>
+          <div class="bottomRightName">PASS Technology</div>
+          <div class="bottomRightEdition">v2.0.0</div>
         </div>
       </div>
       <div class="control-display" @click="controlDisplay=!controlDisplay">
@@ -74,7 +74,7 @@
 import {defineComponent, onMounted, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 // eslint-disable-next-line no-unused-vars
-import {ChatDotSquare, MessageBox, Odometer, ScaleToOriginal, UserFilled,} from "@element-plus/icons-vue";
+import {ChatDotSquare, MessageBox, Odometer, ScaleToOriginal, SemiSelect, UserFilled,} from "@element-plus/icons-vue";
 import router from "@/router";
 import store from "../store";
 import LoginDialog from "@/components/LoginDialog.vue";
@@ -123,6 +123,11 @@ export default defineComponent({
         icon: ScaleToOriginal,
         to: "/laboratory",
       },
+      {
+        title: "数字人平台",
+        icon: UserFilled,
+        to: "/digital_view"
+      }
     ]);
     const isLeftMenu = ref(true);
 

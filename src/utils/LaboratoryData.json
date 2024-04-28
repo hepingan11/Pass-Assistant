@@ -1,5 +1,14 @@
 [
-
+  {
+    "icon": "aiperson.svg",
+    "title": "预设角色",
+    "introduce": "千奇百怪的各种角色 快来试试吧~",
+    "label": [
+      "生成",
+      "智能"
+    ],
+    "path": "/preset_character"
+  },
   {
     "icon": "drawing.svg",
     "title": "AI绘画",

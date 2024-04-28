@@ -442,3 +442,14 @@ export function isQrCodeLoginSucceed(data) {
         method: 'GET'
     })
 }
+
+/**
+ * 获取视频列表
+ * @returns {*}
+ */
+export function getVideoList() {
+    return request({
+        url: '/digital/getVideoList',
+        method: 'POST'
+    })
+}

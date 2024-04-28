@@ -1,20 +1,36 @@
 <template>
+  <div class="topVideo">
+    <!--      <el-button type="primary" @click="play = !play" class="startbutton">播放</el-button>-->
+    <!--      <br/>-->
 
-  <div class="body" ref="scrollRef">
-<!--    导航栏-->
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1">处理中心</el-menu-item>
-      <el-menu-item index="2" >消息中心</el-menu-item>
-      <el-menu-item index="3"><a href="https://www.ele.me">订单管理</a></el-menu-item>
-    </el-menu>
-    <div class="line"></div>
+    <div class="left" style="cursor: pointer" @click="toggleDrawer">
 
-
-    <div class="topVideo">
-<!--      <el-button type="primary" @click="play = !play" class="startbutton">播放</el-button>-->
-<!--      <br/>-->
-      <video src="../assets/video.mp4" autoplay loop class="video"></video>
+      <el-image src="https://img2.imgtp.com/2024/04/27/yQRWy4UO.jpg" fit="contain"></el-image>
+<!--      <h1 class="htext">模型列表<br/><br/>切换模型</h1>-->
+      <div :class="['drawer', { 'show': isDrawerOpen }]">
+        <h2>模型列表</h2>
+        <div class="text item">
+<!--          <el-button type="primary" @click="changeModel('hh')">何平安</el-button>-->
+          <el-button type="primary" @click="toggleVideoSource">切换</el-button>
+          <br/><br/><br/><br/>
+          目前平台暂不支持在线定制数字人模型，如需定制并添加到页面请联系qq1973016127
+        </div>
+      </div>
     </div>
+
+    <video :src="videoSrc" autoplay class="video" ref="videoPlayer" @click="pauseVideo"></video>
+
+    <div class="right" style="cursor: pointer" @click="toggleDrawerT">
+<!--      <h1 class="htext">在线模型<br/><br/>定制制作</h1>-->
+      <el-image src="https://img2.imgtp.com/2024/04/27/RbcDcaNy.jpg"></el-image>
+      <div :class="['drawer', { 'show': isDrawerOpenT }]">
+        <h1>在线定制数字人功能正在努力开发中.....<br/></h1>
+        <h2>快来给站长加点儿鸡腿吧TvT</h2>
+        <el-image src="https://img2.imgtp.com/2024/01/26/3kE2nSx6.jpg"></el-image>
+      </div>
+    </div>
+  </div>
+  <div class="body" ref="scrollRef" @click="closeDrawerAll">
     <div v-if="!conversationList.length" class="explain">
       <img class="logo" alt="Vue logo" src="../assets/neutral-face.svg"/>
       <div class="expositoryCase">AI数字人科技</div>
@@ -24,7 +40,7 @@
         </el-icon>
         <div class="consumeText">每次提问消耗5个SUPER币</div>
       </div>
-      <div class="beCareful">(该模块正在开发中...)可在上面的工具里定制数字人~</div>
+      <div class="beCareful">(该模块正在努力开发中...)可在上面的工具里定制数字人~</div>
     </div>
     <div v-else class="questions" style="margin: 20px 0">
       <div
@@ -176,7 +192,7 @@
       <div class="cache-flex-center">
         <img alt="Vue logo" src="../assets/logo02.svg" class="cache-img"/>
       </div>
-      <div class="cache-text">TIME SEA PLUS</div>
+      <div class="cache-text">派斯科技</div>
       <div class="cache-flex-center cache-padding-top">
         <div class="cache-btn" @click="createdNewChat">
           <el-icon size="16px">
@@ -249,10 +265,59 @@ export default {
       play: false,
       activeIndex: '1',
       activeIndex2: '1',
+      isDrawerOpen: false,
+      drawer: false,
+      count: 0,
+      isDrawerOpenT: false,
+      videoSrc: "https://hh-img-aigc.oss-cn-chengdu.aliyuncs.com/123/hh.mp4",
+      videoSources: [
+          "https://hh-img-aigc.oss-cn-chengdu.aliyuncs.com/123/hh.mp4",
+          "https://hh-img-aigc.oss-cn-chengdu.aliyuncs.com/123/hh2.mp4"
+      ],
+      currentVideoIndex: 0,
     }
   },
   name: "dialogueView",
-  methods: {conversionTime},
+  methods: {conversionTime,
+    toggleDrawer() {
+      this.isDrawerOpen = !this.isDrawerOpen;
+    },
+    closeDrawer() {
+      this.isDrawerOpen = false;
+    },
+    pauseVideo() {
+      const video = this.$refs.videoPlayer;
+      if (this.isPlaying) {
+        video.pause();
+      } else {
+        video.play();
+      }
+    },
+    load () {
+      this.count += 2
+    },
+    toggleDrawerT() {
+      this.isDrawerOpenT = !this.isDrawerOpenT;
+    },
+    closeDrawerT() {
+      this.isDrawerOpenT = false;
+    },
+    closeDrawerAll() {
+      this.closeDrawer();
+      this.closeDrawerT();
+    },
+    open() {
+      this.$message('恭喜你切换数字人模型成功');
+    },
+    changeModel(model) {
+      this.open();
+      console.log("切换模型:",model)
+    },
+    toggleVideoSource() {
+      this.currentVideoIndex = (this.currentVideoIndex + 1) % this.videoSources.length;
+      this.videoSrc = this.videoSources[this.currentVideoIndex];
+    }
+    },
   components: {
     StarFilled,
     CopyDocument,
@@ -264,7 +329,6 @@ export default {
     Goods,
 
     LoginDialog,
-
   },
   computed: {
     store() {
@@ -727,7 +791,7 @@ export default {
 .body {
   scroll-behavior: smooth;
   width: 100%;
-  height: 100%;
+  height: 70%;
   box-sizing: border-box;
   flex-direction: column;
   flex: 1;
@@ -933,7 +997,7 @@ export default {
 }
 
 .explain {
-  margin: auto;
+  margin-top: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1205,23 +1269,72 @@ export default {
 }
 
 .topVideo {
-  height: 500px;
+  height: 30%;
+  display: flex;
+}
+
+.topVideo .video {
+  width: 50%;
+  height: 100%;
+  background-color: #2a2a2a;
+  margin: 0;
+  //padding: 0;
+}
+
+.topVideo .left {
+  width: 25%;
+  //background-image: url(https://img2.imgtp.com/2024/02/25/cRVxwSfK.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--bgColor2);
 
 }
-.topVideo .video {
-  width: auto;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-.startbutton {
-  margin: 0;
-  padding: 20px;
+
+.topVideo .right {
+  //background-image: url(https://img2.imgtp.com/2024/04/27/RbcDcaNy.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 25%;
+  background-color: var(--bgColor2);
 }
 
 .el-menu-demo {
   background-color: var(--bgColor1);
   text-color: var(--textColor1);
+}
 
+.drawer {
+  position: fixed;
+  top: 0;
+  right: -300px; /* 初始位置在屏幕右侧 */
+  width: 300px;
+  height: 100%;
+  background-color: var(--bgColor1);
+  transition: right 0.3s ease-out;
+  box-shadow: -5px 0 5px rgba(0, 0, 0, 0.3);
+  z-index: 10000; /* 将容器放在最上层 */
+}
+
+.show {
+  right: 0; /* 弹出时移动到屏幕中间 */
+}
+
+.text {
+  font-size: 14px;
+  color: var(--textColor1);
+}
+
+.item {
+  padding: 18px 0;
+}
+
+.box-card {
+  width: 480px;
+}
+
+.htext {
+  color: var(--textColor1);
+  margin-top: 10%;
+  margin-left: 10%;
 }
 </style>
