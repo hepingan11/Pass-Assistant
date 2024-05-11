@@ -1276,7 +1276,7 @@ export default {
 .topVideo .video {
   width: 50%;
   height: 100%;
-  background-color: #2a2a2a;
+  background-color: var(--bgColor2);
   margin: 0;
   //padding: 0;
 }

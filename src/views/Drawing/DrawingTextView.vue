@@ -399,6 +399,19 @@ export default {
       }
     ])
 
+    async function getSdModelList() {
+      try {
+        let newVar = await GetSdModelList();
+        if (newVar.length > 0) {
+          modelList.value = newVar
+          form.value.modelName = modelList.value[0].modelName
+        }
+
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
     onMounted(() => {
       imageUrl.value = process.env.VUE_APP_IMAGE;
       if (store.getters.userinfo) {
@@ -485,18 +498,7 @@ export default {
       }
     }
 
-    async function getSdModelList() {
-      try {
-        let newVar = await GetSdModelList();
-        if (newVar.length > 0) {
-          modelList.value = newVar
-          form.value.modelName = modelList.value[0].modelName
-        }
 
-      } catch (e) {
-        console.log(e)
-      }
-    }
 
     const image = ref('')
 
@@ -512,7 +514,15 @@ export default {
     });
     let loginVisible = ref(false);
 
-
+    function onChangeSize(index) {
+      sizeList.value.forEach((s, i) => {
+        s.isSelected = i === index;
+        if (i === index) {
+          form.value.height = s.height;
+          form.value.width = s.width;
+        }
+      });
+    }
 
     async function onSubmit() {
       if (load.value === 1) {
@@ -550,6 +560,43 @@ export default {
 
       }
     }
+
+    // async function onSubmit() {
+    //   if (load.value === 1) {
+    //     return
+    //   }
+    //   let value = form.value;
+    //   if (!value.prompt) {
+    //     ElNotification({
+    //       title: "错误",
+    //       message: '请设置绘画提示词',
+    //       type: "error",
+    //     });
+    //     return
+    //   }
+    //   const formData = new FormData();
+    //   // 添加自定义参数到 FormData
+    //   for (const key in form.value) {
+    //     if (form.value[key]) {
+    //       formData.append(key, form.value[key]);
+    //       console.log(key)
+    //     }
+    //   }
+    //   formData.append('env', 0)
+    //   load.value = 1
+    //   try {
+    //     let promise = await postSdDraw(formData);
+    //     console.log(promise);
+    //   } catch (e) {
+    //     load.value = 0
+    //     ElNotification({
+    //       title: "错误",
+    //       message: e,
+    //       type: "error",
+    //     });
+    //
+    //   }
+    // }
 
     const timerId = ref(null);
 
@@ -598,7 +645,7 @@ export default {
       onSubmit,
       onChange,
       tempFile,
-      // onChangeSize,
+      onChangeSize,
       imageUrl,
       modelList,
       loginVisible,

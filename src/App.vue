@@ -48,7 +48,6 @@ import { onMounted, ref } from "vue";
 
 export default {
   components: { LeftNavigationBar, NavigationBar },
-
   setup() {
     let store = useStore();
     store.commit("initState");
@@ -218,7 +217,7 @@ body {
   --bgboxShadowColor1: #11111144;
   --bgColor2: #2a2a2a;
   --bgboxShadowColor2: #44444444;
-  --bgColor3: #444;
+  --bgColor3: #656565;
   --themeColor1: #8166e7;
   --themeColor2: #8166e7;
   --themeTextColor: #eee;
@@ -237,7 +236,7 @@ body {
   --bgboxShadowColor1: #cccccc44;
   --bgColor2: #eee;
   --bgboxShadowColor2: #dddddd44;
-  --bgColor3: #ddd;
+  --bgColor3: #adadad;
   --themeColor1: #8166e7;
   --themeColor2: #8166e7;
   --themeTextColor: #eee;

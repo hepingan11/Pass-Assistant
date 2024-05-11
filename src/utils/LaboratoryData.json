@@ -11,7 +11,7 @@
   },
   {
     "icon": "drawing.svg",
-    "title": "AI绘画",
+    "title": "新AI绘画",
     "introduce": "根据提示驱动模型生成绚丽多彩的图片绘画",
     "label": [
       "次数消耗",
@@ -40,6 +40,46 @@
     "path": "/personality_view"
   },
   {
+    "icon": "neutral-face.svg",
+    "title": "数字人平台",
+    "introduce": "基于GPT-Sovits+DiD数字人生成+chatgpt3.5模型对话",
+    "label": [
+      "自定义",
+      "智能"
+    ],
+    "path": "/digital_view"
+  },
+  {
+    "icon": "clip.svg",
+    "title": "外链推荐",
+    "introduce": "AI各大网站及何平安的其它网站，欢迎光临哦~",
+    "label": [
+      "链接",
+      "社区"
+    ],
+    "path": "/link_view"
+  },
+  {
+    "icon": "logo02.svg",
+    "title": "智慧派斯",
+    "introduce": "Paisi智慧校园系统",
+    "label": [
+      "智慧系统",
+      "校园"
+    ],
+    "path": "/passnews_view"
+  },
+  {
+    "icon": "ball.svg",
+    "title": "AIGC新闻",
+    "introduce": "收集了最新|实用|热门的AIGC前沿知识",
+    "label": [
+      "NEWS",
+      "社区"
+    ],
+    "path": "/aigc_view"
+  },
+  {
     "icon": "bing.svg",
     "title": "NEW BING",
     "introduce": "微软基于GPT4模型实现的搜索引擎算法和人工智能技术(可能回复失败)",
@@ -58,15 +98,5 @@
       "智能"
     ],
     "path": "/claude_view"
-  },
-  {
-    "icon": "neutral-face.svg",
-    "title": "数字人平台",
-    "introduce": "基于GPT-Sovits+DiD数字人生成+chatgpt3.5模型对话",
-    "label": [
-      "自定义",
-      "智能"
-    ],
-    "path": "/digital_view"
   }
 ]

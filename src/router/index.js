@@ -2,7 +2,7 @@ import {createRouter, createWebHashHistory} from 'vue-router'
 import {cancelArr} from "@/utils/BSideRequest";
 
 const routes = [{
-    path: '/',
+    path: '/app',
     name: 'Index',
     component: () => import('../views/DialogueView.vue'),
     meta: {
@@ -49,6 +49,17 @@ const routes = [{
         path: "/drawing_view",
         name: "NEW DRAWING",
         component: () => import('../views/Drawing/DrawingView.vue'),
+        meta: {
+            title: '绘图',
+            isHeadNavigation: true,
+            keepAlive: true,
+            isLeftMenu: false
+        },
+    },
+    {
+        path: "/drawing_text_view",
+        name: "DRAWING",
+        component: () => import('../views/Drawing/DrawingTextView.vue'),
         meta: {
             title: '新绘图',
             isHeadNavigation: true,
@@ -198,6 +209,70 @@ const routes = [{
             isHeadNavigation: true,
             keepAlive: true,
             isLeftMenu: true
+        }
+    },{
+        path: '/user',
+        name: 'User',
+        component: () => import('@/views/UserView.vue'),
+        meta: {
+            title: '个人中心',
+            isHeadNavigation: true,
+            keepAlive: true,
+            isLeftMenu: true
+        }
+    },{
+        path: '/',
+        name: 'Pass',
+        component: () => import('@/views/PassView.vue'),
+        meta: {
+            title: '派斯助手',
+            isHeadNavigation: false,
+            keepAlive: false,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/link_view',
+        name: 'LinkView',
+        component: () => import('@/views/LinkView.vue'),
+        meta: {
+            title: '链接社区',
+            isHeadNavigation: true,
+            keepAlive: false,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/passnews_view',
+        name: 'PassnewsView',
+        component: () => import('@/views/PassnewsView.vue'),
+        meta: {
+            title: '派斯新闻',
+            isHeadNavigation: true,
+            keepAlive: true,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/aigc_view',
+        name: 'AigcView',
+        component: () => import('@/views/AigcView.vue'),
+        meta: {
+            title: 'AIGC新闻',
+            isHeadNavigation: true,
+            keepAlive: true,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/apply_view',
+        name: 'ApplyLinkView',
+        component: () => import('@/views/ApplyLinkView.vue'),
+        meta: {
+            title: '申请链接',
+            isHeadNavigation: true,
+            keepAlive: true,
+            isLeftMenu: false
         }
     },
 ]

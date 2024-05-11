@@ -2,7 +2,7 @@
   <div class="body" ref="scrollRef">
     <div v-if="!conversationList.length" class="explain">
       <img class="logo" alt="Vue logo" src="../assets/passlogo.png"/>
-      <div class="expositoryCase">欢迎使用-派斯科技</div>
+      <div class="expositoryCase">欢迎使用-Pass Assistant</div>
       <div class="consume">
         <el-icon>
           <Goods/>
@@ -209,7 +209,7 @@
 </template>
 
 <script>
-import {nextTick, onMounted, ref} from "vue";
+import {h, nextTick, onMounted, ref} from "vue";
 import {
   ChatDotRound,
   ChatLineSquare,
@@ -270,8 +270,15 @@ export default {
     const rate = ref(50);
     const memory = ref(10);
     const size = ref(1000);
+    const open = () => {
+      ElNotification({
+        title: "网站提示",
+        message: h('i', { style: 'color: #8166e7' }, '该网站适配于PC端，手机端浏览该网站可能会影响体验，建议使用电脑或平板~'),
+      })
+    }
     onMounted(() => {
       window.addEventListener("resize", handleResize);
+      open();
       handleResize();
       if (store.getters.userinfo) getUser();
       //获取图片域名

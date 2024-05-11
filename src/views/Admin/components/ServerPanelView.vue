@@ -40,6 +40,13 @@
             v-model="form.newBingCookie"
           />
         </el-form-item>
+        <el-form-item label="链接顶图" label-width="200px">
+          <el-input
+              placeholder="请设置图片链接"
+              clearable
+              v-model="form.linkTopImg"
+          />
+        </el-form-item>
         <el-form-item label="Claude原ID" label-width="200px">
           <el-input
             placeholder="请设置organizationUuid"
@@ -155,6 +162,7 @@ export default {
       organizationUuid: "",
       conversationUuid: "",
       sessionKey: "",
+      linkTopImg: "",
     });
 
     onMounted(() => {

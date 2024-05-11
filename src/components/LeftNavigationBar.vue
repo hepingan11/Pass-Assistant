@@ -106,7 +106,7 @@ export default defineComponent({
       {
         title: "智能问答",
         icon: ChatDotSquare,
-        to: "/",
+        to: "/app",
       },
       {
         title: "预设角色",
@@ -130,6 +130,7 @@ export default defineComponent({
       }
     ]);
     const isLeftMenu = ref(true);
+
 
     watch(
         () => router.currentRoute.value,
