@@ -48,7 +48,6 @@ import { onMounted, ref } from "vue";
 
 export default {
   components: { LeftNavigationBar, NavigationBar },
-
   setup() {
     let store = useStore();
     store.commit("initState");

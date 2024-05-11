@@ -42,7 +42,7 @@ export function SdConnectivity() {
 
 export function GetDrawingDataResult(data) {
     return request({
-        url: '/drawing/image/data/'+data,
+        url: 'image/data/'+data,
         method: 'GET'
     })
 }
@@ -133,6 +133,12 @@ export function GetSdModelList() {
     })
 }
 
+export function GetSdDrawListPublic() {
+    return request({
+        url: '/draw/getSdDrawList/public',
+        method: 'GET'
+    })
+}
 
 /**
  *    获取订单分页数据
@@ -407,7 +413,7 @@ export function UseExchangeCode(data) {
  */
 export function FavoritesAdd(data) {
     return request({
-        url: '/user/stat/put/data',
+        url: '/user/star/put/data',
         method: 'POST',
         data
     })
@@ -450,6 +456,48 @@ export function isQrCodeLoginSucceed(data) {
 export function getVideoList() {
     return request({
         url: '/digital/getVideoList',
+        method: 'POST'
+    })
+}
+
+/**
+ * 新发送绘画请求
+ */
+export function postSdDraw(data) {
+    return request({
+        url: '/draw/postSdDraw',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        data
+    })
+}
+
+export function setDrawPublic(data) {
+    return request({
+        url: '/draw/setPublic/' + data,
+        method: 'POST',
+    })
+}
+
+export function getUserDraw(){
+    return request({
+        url: '/draw/getSdDrawList/private',
+        method: 'GET'
+    })
+}
+
+export function deleteImgByurl(data) {
+    return request({
+        url: '/draw/deleteDraw/'+ data,
+        method: 'POST'
+    })
+}
+
+export function updateUserName(data) {
+    return request({
+        url: '/user/upload/username?userName=' +data,
         method: 'POST'
     })
 }

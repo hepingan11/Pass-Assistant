@@ -50,6 +50,17 @@ const routes = [{
         name: "NEW DRAWING",
         component: () => import('../views/Drawing/DrawingView.vue'),
         meta: {
+            title: '绘图',
+            isHeadNavigation: true,
+            keepAlive: true,
+            isLeftMenu: false
+        },
+    },
+    {
+        path: "/drawing_text_view",
+        name: "DRAWING",
+        component: () => import('../views/Drawing/DrawingTextView.vue'),
+        meta: {
             title: '新绘图',
             isHeadNavigation: true,
             keepAlive: true,
@@ -195,6 +206,16 @@ const routes = [{
         component: () => import('@/views/Admin/AdminView.vue'),
         meta: {
             title: '管理控制台',
+            isHeadNavigation: true,
+            keepAlive: true,
+            isLeftMenu: true
+        }
+    },{
+        path: '/user',
+        name: 'User',
+        component: () => import('@/views/UserView.vue'),
+        meta: {
+            title: '个人中心',
             isHeadNavigation: true,
             keepAlive: true,
             isLeftMenu: true

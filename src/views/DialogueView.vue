@@ -2,7 +2,7 @@
   <div class="body" ref="scrollRef">
     <div v-if="!conversationList.length" class="explain">
       <img class="logo" alt="Vue logo" src="../assets/passlogo.png"/>
-      <div class="expositoryCase">欢迎使用-派斯科技</div>
+      <div class="expositoryCase">欢迎使用-Pass Assistant</div>
       <div class="consume">
         <el-icon>
           <Goods/>

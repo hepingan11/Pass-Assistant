@@ -11,7 +11,7 @@
   },
   {
     "icon": "drawing.svg",
-    "title": "AI绘画",
+    "title": "新AI绘画",
     "introduce": "根据提示驱动模型生成绚丽多彩的图片绘画",
     "label": [
       "次数消耗",

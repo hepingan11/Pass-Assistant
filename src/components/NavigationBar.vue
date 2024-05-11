@@ -26,6 +26,7 @@
       class="header-side header-right"
       style="display: flex; align-items: center"
     >
+
       <div @click="switchTheme" class="hidden-xs-only">
         <el-button text class="switchThemeIconWrapper">
           <template v-slot:icon>
@@ -99,6 +100,10 @@
                     v-if="store.getters.userinfo.type === 'ADMIN'"
                     >控制台</el-dropdown-item
                   >
+                  <el-dropdown-item
+                      @click="router().push({path: '/User'})"
+                    >个人中心</el-dropdown-item
+                  >
                   <el-dropdown-item @click="router().push({ path: '/Orders' })"
                     >打赏记录</el-dropdown-item
                   >
@@ -137,7 +142,7 @@
   >
     <div class="wxAppletCodeRow">
       <img class="wxAppletCode" :src="require('../assets/passlogo.png')" />
-      <div>微信扫一扫</div>
+      <div>微信小程序正在开发中...</div>
     </div>
   </el-dialog>
 
@@ -211,6 +216,8 @@ export default defineComponent({
 
     const dropdown1 = ref();
 
+    const color = ref('#8166e7');
+
     function switchTheme() {
       store.commit(
         "setThemeSwitchIndex",
@@ -252,6 +259,7 @@ export default defineComponent({
       }
     }
 
+
     return {
       logout,
       isHeadNavigation,
@@ -264,6 +272,7 @@ export default defineComponent({
       imageUrl,
       switchTheme,
       store,
+      color,
     };
   },
 });
