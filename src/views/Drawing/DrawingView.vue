@@ -1,705 +1,290 @@
 <template>
+
   <div class="body">
-    <div class="container">
-      <div class="flex-container" v-if="isNet">
-        <div class="box">
-          <div style="height: 100%">
-            <div style="height: 90%; overflow-y: auto">
-              <div class="header">
-                <div class="title">
-                  <span>正向提示词</span>
-                  <el-popover
-                      placement="bottom"
-                      effect="dark"
-                      title="提示词"
-                      :width="300"
-                      trigger="hover"
-                      content="用于指定生成图像的文本提示，可以是一个或多个句子 示例: 风景,雨天,树林 "
-                  >
-                    <template #reference>
-                      <el-icon>
-                        <info-filled/>
-                      </el-icon>
-                    </template>
-                  </el-popover>
-                </div>
-              </div>
-              <div class="input">
-                <el-input
-                    placeholder="描述你要画的图(英文更加准确)"
-                    type="textarea"
-                    rows="5"
-                    v-model="form.prompt"
-                ></el-input>
-              </div>
-              <div class="read">
-                <el-tag type="danger" effect="dark" color="var(--themeColor2)" round>Tag 5</el-tag>
-              </div>
-              <div class="header">
-                <div class="title">
-                  <span>反向提示词(可选)</span>
-                  <el-popover
-                      placement="bottom"
-                      effect="dark"
-                      title="过滤"
-                      :width="300"
-                      trigger="hover"
-                      content="用于指定生成图像时的负面文本提示，可以用于约束生成图像的内容。简单来说就是 你不想本次绘图中出现的内容 例如: 雪,动物 "
-                  >
-                    <template #reference>
-                      <el-icon>
-                        <info-filled/>
-                      </el-icon>
-                    </template>
-                  </el-popover>
-                </div>
-              </div>
-              <div class="input">
-                <el-input
-                    placeholder="过滤本次绘图出现的事物(英文更加准确)"
-                    type="textarea"
-                    rows="5"
-                    v-model="form.negative_prompt"
-                ></el-input>
-              </div>
-              <div class="header">
-                <div class="title">
-                  <span>绘画风格</span>
-                  <el-popover
-                      placement="bottom"
-                      effect="dark"
-                      title="输出模型"
-                      :width="300"
-                      trigger="hover"
-                      content="用于控制生成图像的数据模型，可以影响图像的内容和样式"
-                  >
-                    <template #reference>
-                      <el-icon>
-                        <info-filled/>
-                      </el-icon>
-                    </template>
-                  </el-popover>
-                </div>
-              </div>
-              <div style="padding: 15px">
-                <el-select
-                    v-model="form.modelName"
-                    class="m-2"
-                    placeholder="请选择绘画风格"
-                    size="large"
-                    style="width: 100%"
-                >
-                  <el-option
-                      v-for="item in modelList"
-                      :key="item.modelName"
-                      :label="item.textName"
-                      :value="item.modelName"
-                  />
-                </el-select>
-              </div>
-              <div class="header">
-                <div class="title">
-                  <span>参考图(可选)</span>
-                  <el-popover
-                      placement="bottom"
-                      effect="dark"
-                      title="参考图"
-                      :width="300"
-                      trigger="hover"
-                      content="生成于参考图相似的图片内容"
-                  >
-                    <template #reference>
-                      <el-icon>
-                        <info-filled/>
-                      </el-icon>
-                    </template>
-                  </el-popover>
-                </div>
-              </div>
-              <div style="padding: 15px">
-                <el-upload
-                    style="
-                    background-color: var(--bgColor2);
-                    width: 100px;
-                    height: 100px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                  "
-                    :auto-upload="false"
-                    :on-change="onChange"
-                    :show-file-list="false"
-                >
-                  <img v-if="tempFile" :src="tempFile" style="width: 100px;height: 100px"/>
-                  <el-icon v-else class="avatar-uploader-icon">
-                    <Plus
-                    />
-                  </el-icon>
-                </el-upload>
-              </div>
-              <div class="header">
-                <div class="title">
-                  <span>迭代步数</span>
-                  <el-popover
-                      placement="bottom"
-                      effect="dark"
-                      title="绘制次数"
-                      :width="300"
-                      trigger="hover"
-                      content="生成图像时的最大步骤数，步骤数越多，生成的图像可能会更加详细，但处理时间也会增加。"
-                  >
-                    <template #reference>
-                      <el-icon>
-                        <info-filled/>
-                      </el-icon>
-                    </template>
-                  </el-popover>
-                </div>
-              </div>
-              <div style="padding: 15px">
-                <el-select
-                    v-model="form.steps"
-                    class="m-2"
-                    placeholder="Select"
-                    size="large"
-                    style="width: 100%"
-                >
-                  <el-option
-                      v-for="item in stepsList"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                  />
-                </el-select>
-              </div>
-              <div class="header">
-                <div class="title">
-                  <span>采样方法</span>
-                  <el-popover
-                      placement="bottom"
-                      effect="dark"
-                      title="采样器"
-                      :width="300"
-                      trigger="hover"
-                      content="用于控制生成图像的采样器索引，可以影响图像的内容和样式。"
-                  >
-                    <template #reference>
-                      <el-icon>
-                        <info-filled/>
-                      </el-icon>
-                    </template>
-                  </el-popover>
-                </div>
-              </div>
-              <div style="padding: 15px">
-                <el-select
-                    v-model="form.sampler_index"
-                    class="m-2"
-                    placeholder="Select"
-                    size="large"
-                    style="width: 100%"
-                >
-                  <el-option
-                      v-for="item in samplerList"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                  />
-                </el-select>
-              </div>
+    <div>
+      <img :src="src" style="width:100%;height:50%">
+    </div>
+    目前PC版显示可能有些问题，建议缩小网页或使用手机端
+    <br/>
+    正向提示词(英文更准确~):
+    <el-input
+        type="textarea"
+        :rows="2"
+        placeholder="请输入绘画提示词"
+        v-model="prompt">
+    </el-input>
+    <br/>
+    <br/>
+    绘画模型:
+    <el-select v-model="value" placeholder="请选择">
+      <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+      </el-option>
+    </el-select>
+    <br/>
+    <br/>
+    采样器:
+    <el-select v-model="value2" placeholder="请选择">
+      <el-option
+          v-for="item in options2"
+          :key="item.value2"
+          :label="item.label2"
+          :value="item.value2">
+      </el-option>
+    </el-select>
+    <br/>
+    <br/>
+    高度:
+    <el-select v-model="height" placeholder="请选择">
+      <el-option
+          v-for="item in shape"
+          :key="item.height"
+          :label="item.label3"
+          :value="item.height">
+      </el-option>
+    </el-select>
+    <br/>
+    <br/>
+    长度:
+    <el-select v-model="width" placeholder="请选择">
+      <el-option
+          v-for="item in shape2"
+          :key="item.width"
+          :label="item.label3"
+          :value="item.width">
+      </el-option>
+    </el-select>
+    <br/>
+    <br/>
+    步数:
+    <el-select v-model="step" placeholder="请选择">
+      <el-option
+          v-for="item in options3"
+          :key="item.step"
+          :label="item.label3"
+          :value="item.step">
+      </el-option>
+    </el-select>
+    <br/>
+    <br/>
 
-              <div class="header">
-                <div class="title">
-                  <span>是否公开</span>
-                  <el-popover
-                      placement="bottom"
-                      effect="dark"
-                      title="Public?"
-                      :width="300"
-                      trigger="hover"
-                      content="公开后你的作品将会展示在创作欣赏里"
-                  >
-                    <template #reference>
-                      <el-icon>
-                        <info-filled/>
-                      </el-icon>
-                    </template>
-                  </el-popover>
-                </div>
-              </div>
-              <div style="padding: 15px">
-                <el-radio v-model="form.is_public" label="1">是</el-radio>
-                <el-radio v-model="form.is_public" label="0">否</el-radio>
-              </div>
+    <el-button type="primary" @click="requestImage">开始绘画</el-button>
+<!--    <el-button type="primary" @click="scrollToBottom">\/</el-button>-->
 
-              <div class="header">
-                <div class="title">
-                  <span>尺寸比例</span>
-                  <el-popover
-                      placement="bottom"
-                      effect="dark"
-                      title="图片比例"
-                      :width="300"
-                      trigger="hover"
-                      content="生成绘图的宽度和高度比例"
-                  >
-                    <template #reference>
-                      <el-icon>
-                        <info-filled/>
-                      </el-icon>
-                    </template>
-                  </el-popover>
-                </div>
-              </div>
-              <div class="size-container">
-                <div :class="item.isSelected?'size-model-selected':'size-model'" v-for="(item,index) in sizeList"
-                     :key="index" @click="onChangeSize(index)">
-                  <div>
-                    <div class="size-logo">
-                      <img :src="require('../../assets/'+item.image)" alt=""/>
-                    </div>
-                    <div class="size-proportion">
-                      {{ item.proportion }}
-                    </div>
-                    <div class="size-text">{{ item.text }}</div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-            <div
-                style="
-                border-top: 1px solid var(--textColor5);
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                height: 10%;
-                padding: 0 10px;
-                font-weight: 500;
-              "
-            >
-              <div style="font-size: 9px">
-                每次绘图消耗8个SUPER币
-              </div>
-              <div>
-                <el-button round color="var(--themeColor2)" @click="onSubmit" :loading="load===1">
-                  立即生成
-                </el-button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="content">
-          <div v-if="load===0">
-            <div style="text-align: center;padding-bottom: 40px">创作欣赏</div>
-            <div style="max-width: 480px" v-if="showPrivate === 0">
-              <el-row :gutter="4">
-                <el-col v-for="(item,index) in imageList" :key="index" :md="8">
-                  <el-image class="public-image" :src="imageUrl+item" fit="cover" :preview-src-list="[imageUrl+item]"/>
-                </el-col>
-              </el-row>
-            </div>
-
-            <el-scrollbar height="500px" v-if="showPrivate === 1">
-              <p v-for="item in imageList" :key="item" class="scrollbar-demo-item">
-                <el-image class="own-image" :src="imageUrl+item" fit="cover" :preview-src-list="[imageUrl+item]"></el-image><br/>
-                <el-button @click="deleteImg(item)" type="primary">删除图片</el-button>
-              </p>
-            </el-scrollbar>
-
-
-
-            <div style="text-align: center;font-size: 13px;margin-top: 20px;font-weight: 500;color: #888888">
-              <el-button @click="getPublicOps" color="var(--themeColor2)" type="primary">随机浏览</el-button>
-              <el-button @click="userImgView" color="var(--themeColor2)" type="primary">我的作品</el-button><br><br>
-            </div>
-          </div>
-          <ViewState v-if="load===1" LoadText="正在生成(你可以进行其他操作,请勿刷新浏览器)..."/>
-          <div v-if="load===2">
-            <el-image :src="imageUrl+imgUrl" alt="Decoded Image"
-                      style="width:500px;height: 350px" fit="cover" :preview-src-list="[imageUrl+imgUrl]"/><br/>
-            <div style="text-align: center;font-size: 13px;margin-top: 20px;font-weight: 500;color: #888888">
-              <el-button round @click="back" color="var(--themeColor2)" type="primary">返回</el-button>
-            </div>
-          </div>
-
-          <ViewState
-              v-if="load===3"
-              @ClickTheButton="back"
-              Type="error"
-              ErrorText="哦豁!绘制失败了 请稍后再试"
-              IsShowBottom
-              ButtonText="好的"
-          />
+    <br/>
+    (画好后记得保存到本地哦~)
+    <br/>
+    <div v-if="loading===1">
+      <h1>
+        <span>加</span>
+        <span>载</span>
+        <span>中</span>
+        <span>.</span>
+        <span>.</span>
+        <span>.</span>
+      </h1>
+      (预计需要1分钟，请勿刷新网页或点击按钮)
+    </div>
+    <div v-if="loading===2">
+      <div v-if="decodedImages.length">
+        <div v-for="(img, index) in decodedImages" :key="index">
+          <img :src="img" alt="image" />
         </div>
       </div>
-      <ViewState
-          v-else
-          @ClickTheButton="sdConnect"
-          Type="error"
-          ErrorText="绘图服务貌似未开启"
-          IsShowBottom
-          ButtonText="重新检查"
-      />
+      <el-button type="primary" @click="uploadImage">上传图片</el-button>
     </div>
+    <div v-if="loading===3">
+      <div class="milky">AI绘画调用失败T_T</div>
+      <el-button type="primary" @click="redirectTo">绘画错误，点我去另一个绘画接口</el-button>
+    </div>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
   </div>
-  <LoginDialog :show="loginVisible" @close="loginVisible = false"/>
+<!--  <div class="demo-image__placeholder">-->
+<!--    <div class="block">-->
+<!--      <span class="demonstration"></span>-->
+<!--      <el-image :src="src"></el-image>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
 
-import LoginDialog from "@/components/LoginDialog.vue";
-import {InfoFilled, Plus} from "@element-plus/icons-vue";
-
-import {
-  deleteImgByurl,
-  GetPublicRandomOps,
-  GetSdModelList, getUserDraw,
-  postSdDraw,
-  SdConnectivity
-} from "../../../api/BSideApi";
-import store from "@/store";
-import {ElLoading, ElMessage, ElNotification} from "element-plus";
-import ViewState from "@/components/ViewState.vue";
-import router from "@/router";
-
+import axios from "axios";
+// import LeftNavigationBar from "@/components/LeftNavigationBar.vue";
 
 export default {
-  name: "DrawingTextView",
-  computed: {
-    store() {
-      return store
-    }
-  },
+  name: "DrawingView",
+  // components: {LeftNavigationBar},
   data() {
     return {
-      isDrawerOpen: false,
-      decodedImages: []
+      src: 'https://img2.imgtp.com/2024/03/17/3qkbcd2h.png',
+      textarea: '',
+      loading: '0',
+      decodedImages: [],
+      prompt: 'lovely girl',
+      step: '',
+
+      options: [{
+        value: 'mixProV4.Cqhm.safetensors',
+        label: '经典模型'
+      }, {
+        value: 'Anime_Art_SDXL.safetensors',
+        label: '优美动漫风格'
+      }, {
+        value: 'majicMIX realistic_v6.safetensors',
+        label: '写真人物'
+      }, {
+        value: 'Counterfeit-V2.5_v30.safetensors',
+        label: '丰富二次元'
+      }],
+      value: '',
+      options2: [{
+        value2: 'Euler a',
+        label2: 'Euler a(默认推荐)'
+      }, {
+        value2: 'Euler',
+        label2: 'Euler'
+      }, {
+        value2: 'LMS',
+        label2: 'LMS'
+      }, {
+        value2: 'DPM++ 2M',
+        label2: 'DPM++ 2M'
+      }],
+
+      options3: [{
+        step: '10',
+        label3: '10'
+      }, {
+        step: '20',
+        label3: '20'
+      }, {
+        step: '30',
+        label3: '30'
+      }, {
+        step: '40',
+        label3: '40'
+      }],
+      height: '512',
+      width: '512',
+      shape: [{
+        height: 512,
+        label3: "512 px"
+      },{
+        height: 720,
+        label3: "720 px"
+      },{
+        height: 1080,
+        label3: "1080 px"
+      },{
+        height: 1980,
+        label3: "1980 px"
+      },{
+        height: 2560,
+        label3: "2560 px"
+      }],
+      shape2: [{
+        width: 512,
+        label3: "512 px"
+      },{
+        width: 720,
+        label3: "720 px"
+      },{
+        width: 1080,
+        label3: "1080 px"
+      },{
+        width: 1980,
+        label3: "1980 px"
+      },{
+        width: 2560,
+        label3: "2560 px"
+      }]
     }
   },
   methods: {
-    toggleDrawer() {
-      this.isDrawerOpen = !this.isDrawerOpen;
+    scrollToBottom() {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'  // 平滑滚动
+      });
     },
-  },
-  components: {ViewState, Plus, InfoFilled, LoginDialog},
-  setup() {
-    const isNet = ref(false)
-
-    const tempFile = ref('')
-
-    const modelList = ref([]);
-
-    const imageUrl = ref('')
-
-    const imageList = ref([])
-
-    const stepsList = ref([20, 40, 60, 80, 100])
-
-    const samplerList = ref([
-      "Euler a", "Euler", "LMS", "Heun", "DPM2", "DPM2 a", "DPM++ 2S a", "DPM++ 2M", "DPM++ SDE",
-      "DPM fast", "DPM adaptive", "LMS Karras", "DPM2 Karras", "DPM2 a Karras", "DPM++ 2S a Karras",
-      "DPM++ 2M Karras", "DPM++ SDE Karras", "DDIM"
-    ])
-
-    const load = ref(0)
-
-    const imgUrl = ref('')
-
-    const sizeList = ref([
-      {
-        proportion: '1:1',
-        text: '头像',
-        image: 'size-1-1.f9b344b9.svg',
-        isSelected: true,
-        width: 512,
-        height: 512
-      },
-      {
-        proportion: '1:2',
-        text: '手机壁纸',
-        image: 'size-1-2.62c2da58.svg',
-        isSelected: false,
-        width: 1080,
-        height: 2160
-      },
-      {
-        proportion: '3:4',
-        text: '文案图',
-        image: 'size-3-4.ba364264.svg',
-        isSelected: false,
-        width: 384,
-        height: 512
-      },
-      {
-        proportion: '4:3',
-        text: '小红书',
-        image: 'size-4-3.a0ec2a1c.svg',
-        isSelected: false,
-        width: 512,
-        height: 384
-      },
-      {
-        proportion: '9:16',
-        text: '海报',
-        image: 'size-9-16.498b0472.svg',
-        isSelected: false,
-        width: 768,
-        height: 1365
-      },
-      {
-        proportion: '16:9',
-        text: '电脑壁纸',
-        image: 'size-4-3.a0ec2a1c.svg',
-        isSelected: false,
-        width: 1980,
-        height: 1080
-      }
-    ])
-
-    async function getSdModelList() {
-      try {
-        let newVar = await GetSdModelList();
-        if (newVar.length > 0) {
-          modelList.value = newVar
-          form.value.modelName = modelList.value[0].modelName
+    redirectTo() {
+      window.location.href = "https://sd.hepingan.top";
+    },
+    requestImage() {
+      console.log("开始发送请求");
+      this.loading=1;
+      //TODO
+      axios.post("https://sd.fc-stable-diffusion-plus.1398817069756357.cn-hangzhou.fc.devsapp.net/sdapi/v1/txt2img", {
+        "prompt": this.prompt,
+        "step": this.step,
+        "height": this.height,
+        "width": this.width,
+        "override_settings": {
+          "sd_model_checkpoint": this.value,
+        },
+      }, {
+        headers: {
+          "Authorization": "Basic Og=="
         }
-      } catch (e) {
-        console.log(e)
+      }).then(response => {
+        console.log(response.status);
+        this.loading = 2;
+        this.decodeImages(response.data.images); // 解码并展示图像数据
+        // this.costMoney();
+      }).catch(err => {
+        console.error(err);
+        this.loading = 3;
+      });
+    },
+    decodeImages(images) {
+      const decodedImages = images.map(img => this.base64Decode(img));
+      this.decodedImages = decodedImages;
+    },
+    base64Decode(base64) {
+      const binaryString = window.atob(base64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; ++i) {
+        bytes[i] = binaryString.charCodeAt(i);
       }
-    }
-
-    onMounted(() => {
-      imageUrl.value = process.env.VUE_APP_IMAGE;
-      if (store.getters.userinfo) {
-        sdConnect()
-        getPublicOps()
-        getSdModelList()
-      } else {
-        loginVisible.value = true
-      }
-    })
-
-    async function sdConnect() {
-      try {
-        ElLoading.service({
-          fullscreen: true,
-          text: "正在检查SD绘图服务器是否开启...",
-          spinner: "el-icon-loading",
-          background: "rgba(0, 0, 0, 0.7)",
-        });
-
-        let promise = await SdConnectivity();
-        if (!promise) {
-          ElNotification({
-            title: "错误",
-            message: "绘图服务器暂未开启,请联系站点管理员开启绘图服务",
-            type: "error",
-          });
-          isNet.value = false
-        } else {
-          isNet.value = true
-        }
-        ElLoading.service().close();
-
-      } catch (e) {
-        ElLoading.service().close();
-        ElNotification({
-          title: "错误",
-          message: e,
-          type: "error",
-        });
-        router.go(-1)
-      }
-    }
-
-    function onChange(e) {
-      console.log(e.raw.type)
-      if (e.raw.type === 'image/jpg' || e.raw.type === 'image/png' || e.raw.type === 'image/jpeg') {
-        if (e.raw.size / 1024 / 1024 > 2) {
-          ElNotification({
-            title: "错误",
-            message: '图片大小不得超过2MB',
-            type: "error",
-          });
-          return false
-        }
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            tempFile.value = event.target.result
-            form.value.images = e.raw
-            console.log(e)
-            resolve(e);
-          };
-          reader.onerror = (error) => {
-            reject(error);
-          };
-          reader.readAsDataURL(e.raw);
-        });
-      } else {
-        ElNotification({
-          title: "错误",
-          message: '请上传正确的图片',
-          type: "error",
-        });
-        return false
-      }
-    }
-
-    async function getPublicOps() {
-      try {
-        imageList.value = await GetPublicRandomOps();
-        showPrivate.value = 0;
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-
-    // function decodeBase64Image(base64) {
-    //   const img = new Image();
-    //   img.onload = () => {
-    //     const canvas = document.createElement('canvas');
-    //     canvas.width = img.width;
-    //     canvas.height = img.height;
-    //     const ctx = canvas.getContext('2d');
-    //     ctx.drawImage(img, 0, 0);
-    //     const dataURL = canvas.toDataURL('image/png');
-    //     imgUrl.value = dataURL;
-    //     console.log(dataURL)
-    //   };
-    //   img.src = 'data:image/jpeg;base64,' + base64;
-    // }
-
-    const image = ref('')
-
-    const form = ref({
-      modelName: "",
-      images: "",
-      steps: 20,
-      sampler_index: "Euler a",
-      width: 512,
-      height: 512,
-      prompt: "",
-      is_public: "1",
-      negative_prompt: "",
-    });
-    let loginVisible = ref(false);
-
-    function onChangeSize(index) {
-      sizeList.value.forEach((s, i) => {
-        s.isSelected = i === index;
-        if (i === index) {
-          form.value.height = s.height;
-          form.value.width = s.width;
+      const blob = new Blob([bytes.buffer], { type: 'image/png' });
+      return URL.createObjectURL(blob); // 将解码后的图像数据转换为URL
+    },
+    costMoney(){
+      axios.post("http://localhost:8625/drawing/sd/gpt/text"
+      ).then(re =>{
+        console.log(re.status)
+      }).catch(err =>{
+        console.log(err);
+      })
+    },
+    async uploadImage() {
+      const formData = new FormData();
+      this.decodedImages.forEach((item) => formData.append('file', item.file));
+      const res = await axios.post("https://www.imgtp.com/api/upload",formData,{
+        headers:{
+          "token": "34ea3eb2efcfb085b6af1032058dbb45",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0"
         }
       });
-    }
-
-    const sdImgUrl = ref([])
-
-    async function onSubmit() {
-      if (load.value === 1) {
-        return
-      }
-      let value = form.value;
-      if (!value.prompt) {
-        ElNotification({
-          title: "错误",
-          message: '请设置绘画提示词',
-          type: "error",
-        });
-        return
-      }
-      const formData = new FormData();
-      // 添加自定义参数到 FormData
-      for (const key in form.value) {
-        if (form.value[key]) {
-          formData.append(key, form.value[key]);
-          console.log(key)
-        }
-      }
-      formData.append('env', 0)
-      load.value = 1
-      try {
-        const promise = await postSdDraw(formData);
-        if (promise){
-          imgUrl.value = promise;
-          load.value=2
-        }
-      } catch (e) {
-        load.value = 0
-        ElNotification({
-          title: "错误",
-          message: e,
-          type: "error",
-        });
-
+      if (res.status === 200){
+        console.log("上传成功");
+        return "上传成功";
+      }else {
+        console.log("上传失败");
+        return "上传失败";
       }
     }
 
-    const userImageList = ref([]);
+  }
 
-    const showPrivate = ref(0);
-
-    async function userImgView() {
-      try {
-        imageList.value = await getUserDraw();
-        showPrivate.value=1;
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-    function deleteImg(url) {
-      if (deleteImgByurl(url)) {
-        ElMessage({
-          message: '对了.',
-          type: 'success',
-        })
-      } else {
-        ElMessage({
-          message: '错了',
-          type: 'success',
-        })
-      }
-
-    }
-
-
-    function back() {
-      load.value = 0
-    }
-
-    return {
-      sdConnect,
-      isNet,
-      image,
-      back,
-      load,
-      onSubmit,
-      onChange,
-      tempFile,
-      onChangeSize,
-      imageUrl,
-      modelList,
-      loginVisible,
-      form,
-      imageList,
-      stepsList,
-      samplerList,
-      sizeList,
-      sdImgUrl,
-      getPublicOps,
-      imgUrl,
-      userImageList,
-      userImgView,
-      showPrivate,
-      deleteImg
-    };
-  },
 };
 </script>
 
@@ -729,256 +314,83 @@ export default {
   }
 }
 
+
+h1 span {
+  top: 20px; /*字符上下浮动*/
+  position: relative;
+  animation: loading 0.3s ease 0s infinite alternate; /*引用动画*/
+  /* animation: 动画名称 动画时间 动画曲线 何时开始 播放次数 是否反方向;
+  alternate:表示动画先正常运行再反方向运行，并持续交替
+  infinite:表示无限循环*/
+  font-size: 100px;
+  color: white;
+  text-shadow: 0 1px 0  #CCC,
+  0 2px 0 #CCC,
+  0 3px 0 #CCC,
+  0 4px 0 #CCC,
+  0 5px 0 #CCC,
+  0 6px 0 #CCC,
+  0 7px 0 #CCC,
+  0 8px 0 #CCC,
+  0 9px 0 #CCC,
+  0 10px 10px rgba(0, 0, 0, 0.5);
+  /*text-shadow: 水平阴影位置(必须) 垂直阴影位置(必须) 模糊距离(可选) 阴影颜色(可选);
+    text-shadow: h-shadow v-shadow blur color; */
+}
+h1 span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+h1 span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+h1 span:nth-child(4) {
+  animation-delay: 0.3s;
+}
+h1 span:nth-child(5) {
+  animation-delay: 0.4s;
+}
+h1 span:nth-child(6) {
+  animation-delay: 0.5s;
+}
+@keyframes loading {  /* 定义动画*/
+  100% {
+    top: -20px;  /*字符上下浮动*/
+    text-shadow: 0 1px 0 #CCC,
+    0 2px 0 #CCC,
+    0 3px 0 #CCC,
+    0 4px 0 #CCC,
+    0 5px 0 #CCC,
+    0 6px 0 #CCC,
+    0 7px 0 #CCC,
+    0 8px 0 #CCC,
+    0 9px 0 #CCC,
+    0 50px 25px rgba(0, 0, 0, 0.3);
+    /*上升的时候阴影要在文字下面一些，所以垂直阴影的位置坐标和模糊距离要大一些*/
+  }
+}
+
+.milky{
+  font-size: 80px;   /*设置文字大小*/
+  color:#3366FF;  /*设置文字颜色*/
+  text-shadow: 0 8px 10px #6699FF;  /*设置文字阴影*/
+  font-weight: bolder;  /*设置文字宽度*/
+  text-align: center;  /*设置文字居中*/
+
+}
+
+.img {
+  max-width: 100%;
+  height: auto;
+}
 .body {
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  flex-direction: column;
-  flex: 1;
-  align-items: center;
+  max-width: 640px;
+  min-width: 320px;
+  margin: 0 auto;
 
-  display: flex;
-  overflow: hidden;
-  background-color: var(--bgColor2);
-}
 
-@keyframes explainAnimation {
-  from {
-    transform: scale(0);
-  }
-
-  to {
-    transform: scale(1);
-  }
-}
-
-.container {
-  animation: explainAnimation 0.3s;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-}
-
-.list:first-child {
-  margin-top: 60px;
-}
-
-.list {
-  margin-bottom: 40px;
-}
-
-.title {
-  font-size: 14px;
-  font-weight: 550;
-}
-
-.content {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.item {
-  width: 80%;
-  height: 160px;
-  background-color: var(--bgColor1);
-  margin-bottom: 15px;
-  border-radius: 8px;
-  font-size: 15px;
-  color: var(--bgColor2);
-  padding: 20px;
-  box-shadow: 0 5px 7px rgba(35, 35, 35, 0.06);
-}
-
-.item:hover {
-  background-color: var(--bgColor1);
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-@media only screen and (max-width: 767px) {
-  .container {
-    padding: 0;
-  }
-
-  .list:first-child {
-    margin-top: 30px;
-  }
-
-  .list {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .content {
-    padding-left: 20px;
-    padding-right: 20px;
-    box-sizing: border-box;
-  }
-}
-
-:deep(.el-input__inner) {
-  background: var(--bgColor2);
-  font-weight: 400;
-  color: var(--textColor2);
-}
-
-:deep(.el-input__wrapper) {
-  background: var(--bgColor2);
-  box-shadow: none;
-}
-
-:deep(.el-input-group__append, .el-input-group__prepend) {
-  border: none !important;
-}
-
-.flex-container {
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
-}
-
-.box {
-  border: 1px solid var(--textColor5);
-  height: 97%;
-  width: 25%;
-  max-width: 350px;
-  background-color: var(--bgColor1);
-  margin: 10px;
-  border-radius: 10px;
-  color: var(--textColor1);
-  font-size: 14px;
-  font-weight: 550;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.title {
-  display: flex;
-  align-items: center;
-  padding: 15px 15px 0;
-}
-
-.title span {
-  padding-right: 5px;
-}
-
-.button {
-  padding: 15px 15px 0;
-}
-
-.input {
-  padding: 15px;
-}
-
-.content {
-  height: 100%;
-  width: 75%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 550;
-  font-size: 18px;
-}
-
-.public-image {
-  width: 150px;
-  height: 190px;
-  margin-bottom: 5px;
-  border-radius: 8px
-}
-
-div::-webkit-scrollbar {
-  display: none;
-}
-
-.size-container {
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.size-model {
-  border-radius: 5px;
-  margin: 5px auto;
-  width: 98px;
-  height: 90px;
-  background-color: var(--dColor1);
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid var(--dColor1);
-}
-
-.size-model-selected {
-  border-radius: 5px;
-  margin: 5px auto;
-  width: 98px;
-  height: 90px;
-  background-color: var(--dColor2);
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid rgb(129, 102, 231);
+  /* overflow: hidden; */
+  overflow-x: hidden;
 }
 
 
-.size-logo {
-  padding-bottom: 5px
-}
-
-.size-logo img {
-  width: 23px;
-  height: 23px
-}
-
-.size-proportion {
-  padding-bottom: 2px
-}
-
-.size-text {
-  font-size: 9px;
-  font-weight: 500;
-  color: #636363
-}
-
-.drawer {
-  position: fixed;
-  top: 0;
-  right: -300px; /* 初始位置在屏幕右侧 */
-  width: 300px;
-  height: 100%;
-  background-color: var(--bgColor1);
-  transition: right 0.3s ease-out;
-  box-shadow: -5px 0 5px rgba(0, 0, 0, 0.3);
-  z-index: 10000; /* 将容器放在最上层 */
-}
-
-.scrollbar-demo-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 190px;
-  margin: 12px;
-  text-align: center;
-  border-radius: 4px;
-  background: var(--bgColor2);
-  color: var(--el-color-primary);
-}
-
-.own-image{
-  width: 150px;
-  height: 190px;
-  border-radius: 8px
-}
-
-.read {
-  padding: 15px;
-}
 </style>
