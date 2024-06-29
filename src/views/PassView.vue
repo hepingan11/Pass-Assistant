@@ -1,9 +1,13 @@
 <template>
-  <iframe frameborder="false" @load="handleLoad" src="https://my.spline.design/particles-09c66dceb707e50fcd2c245d149afdc6/" style="height: 100%;width: 100%"></iframe>
-  <div v-if="iframeLoaded=false" class="loading">
-    正在加载3D立绘中...可直接点击按钮进入主页面
-  </div>
-  <div class="container" @click="router().push({ path: '/app' })" >
+  <div class="target1" v-if="iframeLoaded"></div>
+  <div class="target2" v-if="iframeLoaded"></div>
+  <div class="target3" v-if="iframeLoaded"></div>
+  <div class="target4" v-if="iframeLoaded"></div>
+  <iframe id="iframe1" frameborder="false" src="https://my.spline.design/particles-09c66dceb707e50fcd2c245d149afdc6/" style="height: 100%;width: 100%"></iframe>
+<!--  <div v-if="iframeLoaded" class="loading">-->
+<!--    正在加载3D立绘中...可直接点击按钮进入主页面-->
+<!--  </div>-->
+  <div class="container" @click="router().push({ path: '/app' })" v-if="!iframeLoaded" >
     <a data-animation="ripple">开启 <span style="font-weight: bold;">AI之旅</span></a>
   </div>
 </template>
@@ -11,23 +15,15 @@
 <script>
   import router from "@/router";
   import store from "@/store";
-  import {h, onMounted} from "vue";
+  import {h, onMounted, ref} from "vue";
   import {ElNotification} from "element-plus";
-
   export default {
+
     name: `PassView`,
-    data() {
-      return {
-        iframeLoaded: false
-      }
-    },
     methods: {
       router() {
         return router
       },
-      handleLoad(){
-        this.iframeLoaded = true;
-      }
     },
     computed: {
       store() {
@@ -42,9 +38,22 @@
         })
       }
 
-      onMounted(() => {
-        open1()
+      setTimeout(() => {
+        handleLoad();
+        open1();
+      }, 1700);
+
+
+      onMounted( ()=>{
       })
+      const iframeLoaded = ref(true);
+      function handleLoad() {
+        iframeLoaded.value = false;
+      }
+
+      return {
+        iframeLoaded,
+      }
     }
   }
 
@@ -141,4 +150,95 @@
   margin: auto;
 }
 
+.target1 {
+  width: 72px;
+  height: 72px;
+  background-color: #baf;
+  /* 左侧滚动旋转进入 */
+  animation: leftEnter 1.5s infinite ease-out both;
+  position: absolute;
+  left: 45%;
+  top: 30%;
+}
+
+@keyframes leftEnter {
+  0% {
+    transform: translateX(-1000px) rotate(-540deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.target2 {
+  width: 72px;
+  height: 72px;
+  background-color: #abf;
+  /* 右侧滚动旋转进入 */
+  animation: rightEnter 1.5s infinite ease-out both;
+  position: absolute;
+  left: 45%;
+  top: 40%;
+}
+
+@keyframes rightEnter {
+  0% {
+    transform: translateX(1000px) rotate(540deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.target3 {
+  width: 72px;
+  height: 72px;
+  background-color: pink;
+  /* 上方滚动旋转进入 */
+  animation: topEnter 1.5s infinite ease-out both;
+  position: absolute;
+  left: 45%;
+  top: 50%;
+}
+
+@keyframes topEnter {
+  0% {
+    transform: translateY(-800px) rotate(540deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.target4 {
+  width: 72px;
+  height: 72px;
+  background-color: rgb(211, 140, 233);
+  /* 下方滚动旋转进入 */
+  animation: bottomEnter 1.5s infinite ease-out both;
+  position: absolute;
+  left: 45%;
+  top: 20%;
+}
+
+@keyframes bottomEnter {
+  0% {
+    transform: translateY(1200px) rotate(540deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
 </style>

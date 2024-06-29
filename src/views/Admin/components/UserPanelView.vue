@@ -104,7 +104,7 @@ import { conversionTime } from "@/utils/date";
 import { ElLoading, ElNotification } from "element-plus";
 
 export default {
-  name: "ordersView",
+  name: "orderView",
   computed: {
     store() {
       return store;

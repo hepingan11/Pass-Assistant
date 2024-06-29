@@ -61,6 +61,13 @@
             v-model="form.conversationUuid"
           />
         </el-form-item>
+        <el-form-item label="链接顶图" label-width="200px">
+          <el-input
+              placeholder="请设置图片链接"
+              clearable
+              v-model="form.linkTopImg"
+          />
+        </el-form-item>
         <el-form-item label="Claude密钥" label-width="200px">
           <el-input
             placeholder="请设置sessionKey"

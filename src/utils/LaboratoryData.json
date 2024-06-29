@@ -98,5 +98,15 @@
       "智能"
     ],
     "path": "/claude_view"
+  },
+  {
+    "icon": "creation.svg",
+    "title": "大数据专区",
+    "introduce": "何平安平时无聊爬的数据",
+    "label": [
+      "站长",
+      "大数据"
+    ],
+    "path": "/data_view"
   }
 ]

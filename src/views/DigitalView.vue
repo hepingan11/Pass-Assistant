@@ -5,7 +5,7 @@
 
     <div class="left" style="cursor: pointer" @click="toggleDrawer">
 
-      <el-image src="https://img2.imgtp.com/2024/04/27/yQRWy4UO.jpg" fit="contain"></el-image>
+      <h1>模型切换</h1>
 <!--      <h1 class="htext">模型列表<br/><br/>切换模型</h1>-->
       <div :class="['drawer', { 'show': isDrawerOpen }]">
         <h2>模型列表</h2>
@@ -22,7 +22,7 @@
 
     <div class="right" style="cursor: pointer" @click="toggleDrawerT">
 <!--      <h1 class="htext">在线模型<br/><br/>定制制作</h1>-->
-      <el-image src="https://img2.imgtp.com/2024/04/27/RbcDcaNy.jpg"></el-image>
+      <h1>模型定制</h1>
       <div :class="['drawer', { 'show': isDrawerOpenT }]">
         <h1>在线定制数字人功能正在努力开发中.....<br/></h1>
         <h2>快来给站长加点儿鸡腿吧TvT</h2>

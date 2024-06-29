@@ -346,7 +346,7 @@ export function SendAMessage(data) {
  */
 export function Favorites(data) {
     return request({
-        url: '/user/star/get/web',
+        url: '/user/stat/get/web',
         method: 'GET',
         data
     })
@@ -418,7 +418,7 @@ export function FavoritesAdd(data) {
  */
 export function FavoritesDel(data) {
     return request({
-        url: '/user/star/delete/' + data,
+        url: '/user/stat/delete/' + data,
         method: 'POST'
     })
 }
@@ -450,6 +450,179 @@ export function isQrCodeLoginSucceed(data) {
 export function getVideoList() {
     return request({
         url: '/digital/getVideoList',
+        method: 'POST'
+    })
+}
+
+/**
+ * 新发送绘画请求
+ */
+export function postSdDraw(data) {
+    return request({
+        url: '/draw/postSdDraw',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        data
+    })
+}
+
+export function setDrawPublic(data) {
+    return request({
+        url: '/draw/setPublic/' + data,
+        method: 'POST',
+    })
+}
+
+export function getUserDraw() {
+    return request({
+        url: '/draw/getSdDrawList/private',
+        method: 'GET'
+    })
+}
+
+export function deleteImgByurl(data) {
+    return request({
+        url: '/draw/deleteDraw/'+ data,
+        method: 'POST'
+    })
+}
+
+export function updateUserName(data) {
+    return request({
+        url: '/user/upload/username?userName=' +data,
+        method: 'POST'
+    })
+}
+
+export function getTopImgUrl() {
+    return request({
+        url: '/link/getTopImg',
+        method: 'GET'
+    })
+}
+
+export function setTopImgUrl(data) {
+    return request({
+        url: '/admin/link/setTopImg',
+        method: 'POST',
+        data
+    })
+}
+
+export function getLinkList() {
+    return request({
+        url: '/link/getList',
+        method: 'GET'
+    })
+}
+
+export function GetUserLinkList() {
+    return request({
+        url: '/link/userList',
+        method: 'GET'
+    })
+}
+
+export function ApplyLink(data) {
+    return request({
+        url: '/link/applyLink',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        data
+    })
+}
+
+export function allowUserLink(data){
+    return request({
+        url: '/link/allowLink/' + data,
+        method: 'POST',
+    })
+}
+
+export function deleteLinkById(data){
+    return request({
+        url: '/link/deleteLink/' + data,
+        method: 'POST',
+    })
+}
+
+export function refuseLinkById(data){
+    return request({
+        url: '/link/refuseLink/' + data,
+        method: 'POST',
+    })
+}
+
+export function setLinkHotById(data){
+    return request({
+        url: '/link/setLinkHot/' + data,
+        method: 'POST',
+    })
+}
+
+export function deleteLinkHotById(data){
+    return request({
+        url: '/link/deleteLinkHot/' + data,
+        method: 'POST',
+    })
+}
+
+export function selectStatLink(){
+    return request({
+        url: '/link/selectStatLink',
+        method: 'GET',
+    })
+}
+
+export function addLinkStatById(data){
+    return request({
+        url: '/link/addStatLink/' + data,
+        method: 'POST',
+    })
+}
+
+export function getPriceData(){
+    return request({
+        url: '/data/getPrice',
+        method: 'GET'
+    })
+}
+
+export function getNumData(){
+    return request({
+        url: '/data/numSort',
+        method: 'GET'
+    })
+}
+
+export function cancelLinkStatById(data){
+    return request({
+        url: '/link/cancelStatLink/'+ data,
+        method: 'POST'
+    })
+}
+
+export function getPassNews(data){
+    return request({
+        url: '/pass/getNews/'+ data,
+        method: 'GET'
+    })
+}
+
+export function getAllNum(){
+    return request({
+        url: '/pass/getAllNum',
+        method: 'GET'
+    })
+}
+
+export function passLogin(account,password){
+    return request({
+        url: '/pass/login/student?account='+ account +"&password="+ password,
         method: 'POST'
     })
 }

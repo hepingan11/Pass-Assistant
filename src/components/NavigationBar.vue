@@ -101,7 +101,7 @@
                     >控制台</el-dropdown-item
                   >
                   <el-dropdown-item
-                      @click="router().push({path: '/User'})"
+                      @click="router().push({path: '/user_view'})"
                     >个人中心</el-dropdown-item
                   >
                   <el-dropdown-item @click="router().push({ path: '/Orders' })"

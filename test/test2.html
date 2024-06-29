@@ -1,82 +1,34 @@
-<template>
-    <div>
-        <div class="title">热销推荐</div>
-        <ul>
-            <li
-                    class="item border-bottom"
-                    v-for="item of recomendList"
-                    :key="item.id"
-            >
-                <img class="item-img" :src="item.imgUrl" />
-                <div class="item-info">
-                    <p class="item-title">{{ item.title }}</p>
-                    <p class="item-desc">{{ item.desc }}</p>
-                    <button class="item-button">查看详情</button>
-                </div>
-            </li>
-        </ul>
-    </div>
-</template>
-
-<script>
-    export default {
-        name: 'HomeRecommend',
-        data () {
-            return {
-                recomendList: [{
-                    id: '0001',
-                    imgUrl: 'http://img1.qunarzz.com/sight/p0/1901/7c/7cb1cca588241d6ba3.img.jpg_200x200_297820fb.jpg',
-                    title: '厦门娱乐万岁',
-                    desc: '谁说来厦门就要去鼓浪屿？其实不登鼓浪屿也有新玩法，去探寻你不知道的海底世界'
-                }, {
-                    id: '0002',
-                    imgUrl: 'http://img1.qunarzz.com/sight/p0/1901/7c/7cb1cca588241d6ba3.img.jpg_200x200_297820fb.jpg',
-                    title: '厦门娱乐万岁',
-                    desc: '谁说来厦门就要去鼓浪屿？其实不登鼓浪屿也有新玩法，去探寻你不知道的海底世界'
-                }, {
-                    id: '0003',
-                    imgUrl: 'http://img1.qunarzz.com/sight/p0/1901/7c/7cb1cca588241d6ba3.img.jpg_200x200_297820fb.jpg',
-                    title: '厦门娱乐万岁',
-                    desc: '谁说来厦门就要去鼓浪屿？其实不登鼓浪屿也有新玩法，去探寻你不知道的海底世界'
-                }]
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS Example</title>
+    <style>
+        .container {
+            display: flex;
         }
-    }
-</script>
-
-<style lang="stylus">
-    .title
-    margin-top: .2rem;
-                  line-height: .8rem
-                                 background: #eee
-                                 //文本缩进
-                                 text-indent: .2rem
-                                                .item
-                                                overflow: hidden
-                                                display: flex
-                                                hieght: 1.9rem
-                                                           .item-img
-                                                           height: 1.7rem
-                                                                      width: 1.7rem
-                                                                                padding: .1rem
-                                                                                           .item-info
-                                                                                           //所有子元素的长度相同
-                                                                                           flex: 1
-    min-width: 0
-    padding: .1rem
-               .item-title
-               line-height: .54rem
-                               font-size: .32rem
-    ellipsis()
-    .item-desc
-    line-height: .4rem
-                   color: #ccc
-    ellipsis()
-    .item-button
-    line-height: .44rem
-                    margin-top: .16rem
-                                   background: #ff9300
-                                   padding: 0 .2rem
-                                                border-radius: .06rem
-                                                                  color: #fff
-</style>
+        .column {
+            width: 100px;
+            background-color: teal;
+        }
+        .row {
+            display: flex;
+            align-items: center;
+        }
+        .cell {
+            width: 50px;
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="column">Column 1</div>
+    <div class="row">
+        <div class="cell">Cell 1</div>
+        <div class="cell">Cell 2</div>
+    </div>
+    <div class="column">Column 2</div>
+</div>
+</body>
+</html>

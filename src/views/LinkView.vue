@@ -9,49 +9,76 @@
           active-text-color="#e9636c"
           text-color="var(--themeColor2)"
       >
-          <el-menu-item index="1">
+          <el-menu-item index="1" @click="scrollToHot('hot')">
             <el-icon><HomeFilled /></el-icon>
             <template #title>热门网址</template>
           </el-menu-item>
 
-        <el-menu-item index="2" @click="scrollToTarget">
+        <el-menu-item index="2" @click="scrollToHot('stat')">
           <el-icon><StarFilled /></el-icon>
           <template #title>我的收藏</template>
         </el-menu-item>
-        <el-menu-item index="3">
+        <el-menu-item index="3" @click="scrollToHot('work')">
           <el-icon><Tickets /></el-icon>
           <template #title>资源~</template>
         </el-menu-item>
-        <el-menu-item index="4">
+        <el-menu-item index="4" @click="scrollToHot('ai')">
           <el-icon><MagicStick /></el-icon>
           <template #title>AI网站</template>
         </el-menu-item>
-        <el-menu-item index="5">
+        <el-menu-item index="5" @click="scrollToHot('tool')">
           <el-icon><Box /></el-icon>
           <template #title>工具箱</template>
         </el-menu-item>
-        <el-menu-item index="6">
+        <el-menu-item index="6" @click="scrollToHot('tech')">
           <el-icon><Cpu /></el-icon>
           <template #title>黑科技</template>
         </el-menu-item>
-        <el-menu-item index="7">
+        <el-menu-item index="7" @click="scrollToHot('other')">
           <el-icon><MoreFilled /></el-icon>
           <template #title>其它</template>
         </el-menu-item>
       </el-menu>
     </div>
     <div class="body">
-      <el-image :src=topImg class="top-img" fit="cover" @click="router().push({ path: '/apply_view' })"></el-image>
       <br>
-
       <div class="content">
-
-        <el-icon color="var(--themeColor2)" size="22px"><HomeFilled /></el-icon> 热门网站
-        <br><br>
+        <el-image :src=topImg class="top-img" fit="cover" @click="router().push({ path: '/apply_view' })"></el-image>
+        <br>
+        <div style="margin-bottom: 15px">
+          <el-icon color="var(--themeColor2)" size="25px"><HomeFilled /></el-icon> <span style="font-size: 20px">热门网站</span>
+        </div>
+        <br>
         <div id="hot" class="news-content">
           <div v-for="item in linkList" :key="item" class="news-item">
+              <div class="news-image" v-if="item.isHot ===1">
+                <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
+              </div>
+              <div class="news-description" v-if="item.isHot === 1">
+                <h2>{{ item.linkName }}</h2>
+                <p>{{ item.linkIntro}}</p>
+              </div>
+              <el-button
+                  v-if="item.isHot === 1"
+                  type="primary"
+                  @click="handle(item.linkUrl)"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style="margin-top: 50px"
+                  color="var(--themeColor2)"
+              >
+                GO
+              </el-button>
+          </div>
+        </div>
+<!--收藏-->
+        <div style="margin-bottom: 15px">
+          <el-icon color="var(--themeColor2)" size="25px"><StarFilled /></el-icon> <span style="font-size: 20px">我的收藏</span>
+        </div>
+        <div id="stat" class="news-content">
+          <div v-for="item in userStatLink" :key="item" class="news-item">
             <div class="news-image">
-              <el-image :src="item.linkImg" fit="contain" style="width: 200px"></el-image>
+              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
             </div>
             <div class="news-description">
               <h2>{{ item.linkName }}</h2>
@@ -59,40 +86,174 @@
             </div>
             <el-button
                 type="primary"
-                tag="a"
-                :href=item.linkUrl
+                @click="handle(item.linkUrl)"
                 target="_blank"
                 rel="noopener noreferrer"
                 style="margin-top: 50px"
                 color="var(--themeColor2)"
             >
-              >
+              GO
             </el-button>
+            <el-icon v-if="userStatLink.includes(item)" color="var(--themeColor2)" @click="cancelLinkStat(item.linkId)"><StarFilled /></el-icon>
           </div>
         </div>
 
+        <div style="margin-bottom: 15px">
+          <el-icon color="var(--themeColor2)" size="25px"><Tickets /></el-icon> <span style="font-size: 20px">冲浪资源</span>
+        </div>
+        <div id="work" class="news-content">
+          <div v-for="item in linkList" :key="item" class="news-item">
+            <div class="news-image" v-if="item.linkSort === 'work'">
+              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
+            </div>
+            <div class="news-description" v-if="item.linkSort === 'work'">
+              <h2>{{ item.linkName }}</h2>
+              <p>{{ item.linkIntro}}</p>
+            </div>
+            <el-button
+                v-if="item.linkSort === 'work'"
+                type="primary"
+                @click="handle(item.linkUrl)"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="margin-top: 50px"
+                color="var(--themeColor2)"
+            >
+              GO
+            </el-button>
+            <el-icon v-if="item.linkSort === 'work'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <el-icon color="var(--themeColor2)" size="25px"><MagicStick /></el-icon> <span style="font-size: 20px">Ai改变未来</span>
+        </div>
+        <div id="ai" class="news-content">
+          <div v-for="item in linkList" :key="item" class="news-item">
+            <div class="news-image" v-if="item.linkSort === 'ai'">
+              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
+            </div>
+            <div class="news-description" v-if="item.linkSort === 'ai'">
+              <h2>{{ item.linkName }}</h2>
+              <p>{{ item.linkIntro}}</p>
+            </div>
+
+            <el-button
+                v-if="item.linkSort === 'ai'"
+                type="primary"
+                @click="handle(item.linkUrl)"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="margin-top: 50px"
+                color="var(--themeColor2)"
+            >
+              GO
+            </el-button>
+            <el-icon v-if="item.linkSort === 'ai'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <el-icon color="var(--themeColor2)" size="25px"><Box /></el-icon> <span style="font-size: 20px">工具箱</span>
+        </div>
+        <div id="tool" class="news-content">
+          <div v-for="item in linkList" :key="item" class="news-item">
+            <div class="news-image" v-if="item.linkSort === 'tool'">
+              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
+            </div>
+            <div class="news-description" v-if="item.linkSort === 'tool'">
+              <h2>{{ item.linkName }}</h2>
+              <p>{{ item.linkIntro}}</p>
+            </div>
+            <el-button
+                v-if="item.linkSort === 'tool'"
+                type="primary"
+                @click="handle(item.linkUrl)"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="margin-top: 50px"
+                color="var(--themeColor2)"
+            >
+              GO
+            </el-button>
+            <el-icon v-if="item.linkSort === 'tool'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <el-icon color="var(--themeColor2)" size="25px"><Cpu /></el-icon> <span style="font-size: 20px">黑科技</span>
+        </div>
+        <div id="tech" class="news-content">
+          <div v-for="item in linkList" :key="item" class="news-item">
+            <div class="news-image" v-if="item.linkSort === 'tech'">
+              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
+            </div>
+            <div class="news-description" v-if="item.linkSort === 'tech'">
+              <h2>{{ item.linkName }}</h2>
+              <p>{{ item.linkIntro}}</p>
+            </div>
+            <el-button
+                v-if="item.linkSort === 'tech'"
+                type="primary"
+                @click="handle(item.linkUrl)"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="margin-top: 50px"
+                color="var(--themeColor2)"
+            >
+              GO
+            </el-button>
+            <el-icon v-if="item.linkSort === 'tech'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 15px">
+          <el-icon color="var(--themeColor2)" size="25px"><MoreFilled /></el-icon> <span style="font-size: 20px">其它</span>
+        </div>
+        <div id="other" class="news-content">
+          <div v-for="item in linkList" :key="item" class="news-item">
+            <div class="news-image" v-if="item.linkSort === 'other'">
+              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
+            </div>
+            <div class="news-description" v-if="item.linkSort === 'other'">
+              <h2>{{ item.linkName }}</h2>
+              <p>{{ item.linkIntro}}</p>
+            </div>
+            <el-button
+                v-if="item.linkSort === 'other'"
+                type="primary"
+                @click="handle(item.linkUrl)"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="margin-top: 50px"
+                color="var(--themeColor2)"
+            >
+              GO
+            </el-button>
+            <el-icon v-if="item.linkSort === 'other'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
   import store from "@/store";
   import {onMounted, ref} from "vue";
-  import {getLinkList, getTopImgUrl} from "../../api/BSideApi";
+  import {addLinkStatById, cancelLinkStatById, getLinkList, getTopImgUrl, selectStatLink} from "../../api/BSideApi";
   import {conversionTime} from "@/utils/date";
   import router from "@/router";
+  import {Cpu, StarFilled, Tickets} from "@element-plus/icons-vue";
+  import {ElNotification} from "element-plus";
 
   export default {
     name: "LinkView",
+    components: {Cpu, Tickets, StarFilled},
     methods: {
       router() {
         return router
       },
-      scrollToTarget() {
-        this.$refs.targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
     },
     computed: {
       store() {
@@ -100,13 +261,13 @@
       },
     },
     mounted() {
-      const hash = this.$route.hash;
-      if (hash) {
-        const targetElement = document.getElementById(hash.substring(1));
-        if (targetElement) {
-          targetElement.scrollIntoView();
-        }
-      }
+      // const hash = this.$route.hash;
+      // if (hash) {
+      //   const targetElement = document.getElementById(hash.substring(1));
+      //   if (targetElement) {
+      //     targetElement.scrollIntoView();
+      //   }
+      // }
     },
     setup(){
       const dataTables = ref([]);
@@ -115,26 +276,20 @@
       let load = ref(true);
       let empty = ref(false);
       let error = ref(false);
-
       const topImg = ref('')
 
-      const linkList = ref([
-        {
-          linkName: "Pass Assistant",
-          linkUrl: "https://gpt.hepingan.top",
-          linkIntro: "很厉害的网站哦",
-          linkImg: "https://img-hepingan.oss-cn-hangzhou.aliyuncs.com/8330C231A8EF08B924177D874F752187.png",
-          linkSort: "hot"
-        },
-        {
-          linkName: "AIGC",
-          linkUrl: "https://ai.hepingan.top",
-          linkIntro: "balala",
-          linkImg: "https://img-hepingan.oss-cn-hangzhou.aliyuncs.com/6B55CC142C9B065BFB5A40A97EA7C732.png",
-          linkSort: "hot"
-        }
-      ])
+      function handle(url){
+        window.open(url,'_blank');
+      }
 
+      const linkList = ref([])
+
+      function scrollToHot(sort) {
+        let hotElement = document.getElementById(sort);
+        if (hotElement) {
+          hotElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+      }
       const isCollapse = ref(true)
 
       const count = ref(0)
@@ -146,28 +301,49 @@
         topImg.value = await getTopImgUrl();
       }
 
-      const hotLinkList = ref([])
-      const statLinkList = ref([])
-      const workLinkList = ref([])
-      const aiLinkList = ref([])
-      const toolLinkList = ref([])
-      const techLinkList = ref([])
-      const otherLinkList = ref([])
       async function LinkList() {
         linkList.value = await getLinkList();
-        if (linkList.value) {
-          if(linkList.value.every(item=>{
-            return item.linkSort = 'hot'
-          })){
-            hotLinkList.value.
-          }
+        linkList.value = linkList.value.filter(item => item.isPublic !== 0);
+
+      }
+
+      const imageUrl= ref('');
+
+      onMounted( () =>{
+        imageUrl.value = process.env.VUE_APP_IMAGE;
+        getTopImg();
+        LinkList();
+        getUserStatLink();
+      })
+
+      const userStatLink = ref([]);
+
+      async function addLinkStat(id) {
+        const v = await addLinkStatById(id)
+        if (!v) {
+          ElNotification({
+            title: "收藏成功",
+            message: '可以刷新页面查看最新',
+            type: "success",
+          });
         }
       }
 
-      onMounted( () =>{
-        getTopImg();
-        LinkList();
-      })
+      async function cancelLinkStat(id) {
+        const v = await cancelLinkStatById(id);
+        if (!v) {
+          ElNotification({
+            title: "取消收藏成功",
+            message: '可以刷新页面查看最新',
+            type: "success",
+          });
+        }
+      }
+
+      async function getUserStatLink() {
+        userStatLink.value = await selectStatLink();
+        console.log(userStatLink)
+      }
 
       async function handleCurrentChange(pageNum) {
         try {
@@ -191,6 +367,8 @@
         }
       }
 
+
+
       return{
         topImg,
         linkList,
@@ -206,13 +384,12 @@
         count,
         load2,
         isCollapse,
-        hotLinkList,
-        statLinkList,
-        workLinkList,
-        aiLinkList,
-        toolLinkList,
-        techLinkList,
-        otherLinkList,
+        handle,
+        scrollToHot,
+        imageUrl,
+        userStatLink,
+        addLinkStat,
+        cancelLinkStat,
       }
     }
   }
@@ -238,7 +415,6 @@
   height: 100%;
   box-sizing: border-box;
   flex-direction: column;
-  flex: 1;
   align-items: center;
   display: flex;
   overflow: auto;
@@ -266,25 +442,9 @@
 }
 
 .top-img{
-  width: 85%;
+  width: 100%;
   height: 250px;
   border-radius: 10px;
-}
-
-.scrollbar-demo-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  margin: 10px;
-  text-align: center;
-  border-radius: 4px;
-  background: var(--el-color-primary-light-9);
-  color: var(--el-color-primary);
-}
-
-.example-pagination-block + .example-pagination-block {
-  margin-top: 10px;
 }
 
 .news-content{
@@ -317,7 +477,7 @@ h2 {
 }
 
 p {
-  color: #555;
+  color: var(--textColor2);
 }
 
 .circle-breath {
