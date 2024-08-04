@@ -347,7 +347,7 @@
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
+import {inject, onMounted, ref} from "vue";
 
 import LoginDialog from "@/components/LoginDialog.vue";
 import {InfoFilled, Plus} from "@element-plus/icons-vue";
@@ -476,10 +476,26 @@ export default {
         sdConnect()
         getPublicOps()
         getSdModelList()
+        checkTrue()
+
       } else {
         loginVisible.value = true
       }
     })
+
+    function checkTrue(){
+      const globalData = inject('globalData');
+      ElNotification({
+        title: "Ai绘画暂停服务",
+        message: "由于资金原因，ai绘画暂时暂停服务,国赛的时候再开",
+        type: "error",
+      });
+      // 获取变量的值
+      // const value = globalData.sharedVariable;
+      // if (value) {
+
+        // });
+    }
 
     async function sdConnect() {
       try {

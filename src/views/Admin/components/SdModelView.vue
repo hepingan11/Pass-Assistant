@@ -8,6 +8,8 @@
       >新增模型
       </el-button
       >
+      是否开启Ai绘画：<el-switch v-model="isOn" />
+
     </div>
     <el-table
         :data="dataTables"
@@ -98,7 +100,7 @@
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
+import {inject, onMounted, ref} from "vue";
 import store from "@/store";
 import {DeleteSdModel, GetSdModelPage, PutSdModel,} from "../../../../api/BSideApi";
 import {conversionTime} from "@/utils/date";
@@ -131,6 +133,10 @@ export default {
         handleCurrentChange(current.value);
       }
     });
+
+
+    const globalData = inject('globalData');
+    const isOn = globalData.sharedVariable;
 
     async function handleAddSdModel() {
       const {modelName, textName} = form.value;
@@ -254,6 +260,9 @@ export default {
       dialogFormVisible,
       handleAddSdModel,
       form,
+      globalData,
+      isOn,
+
     };
   },
 };

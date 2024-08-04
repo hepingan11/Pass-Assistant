@@ -108,5 +108,15 @@
       "大数据"
     ],
     "path": "/data_view"
+  },
+  {
+    "icon": "audio.svg",
+    "title": "图床",
+    "introduce": "公用图床分享",
+    "label": [
+      "图床",
+      "public"
+    ],
+    "path": "/photo_view"
   }
 ]

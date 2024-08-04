@@ -626,3 +626,18 @@ export function passLogin(account,password){
         method: 'POST'
     })
 }
+
+export function getShopInfo() {
+    return request({
+        url: '/data/shopInfo',
+        method: 'GET'
+    })
+}
+
+export function UploadFile(data){
+    return request({
+        url: '/photo/upload8',
+        method: 'POST',
+        data
+    })
+}

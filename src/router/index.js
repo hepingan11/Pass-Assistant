@@ -276,6 +276,39 @@ const routes = [{
             keepAlive: true,
             isLeftMenu: false
         }
+    },
+    {
+        path: '/data_test_view',
+        name: 'DataTestView',
+        component: () => import('@/views/Data/DataTestView.vue'),
+        meta: {
+            title: '京东数据',
+            isHeadNavigation: true,
+            keepAlive: true,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/data_flourish_view',
+        name: 'DataFlourishView',
+        component: () => import('@/views/Data/DataFlourishView.vue'),
+        meta: {
+            title: 'Flourish数据',
+            isHeadNavigation: true,
+            keepAlive: true,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/photo_view',
+        name: 'PhotoView',
+        component: () => import('@/views/PhotoView.vue'),
+        meta: {
+            title: '图床',
+            isHeadNavigation: true,
+            keepAlive: true,
+            isLeftMenu: false
+        }
     }
 ]
 
@@ -294,7 +327,7 @@ router.beforeEach(async (to) => {
     })
 
     // TODO 设置浏览器Title
-    document.title = (to.meta.title ? to.meta.title : '') + ' - Pass Technology'
+    document.title = (to.meta.title ? to.meta.title : '') + ' - H公司管理系统'
 })
 
 export default router

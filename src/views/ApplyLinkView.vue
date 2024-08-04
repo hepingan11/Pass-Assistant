@@ -45,7 +45,8 @@
             </el-icon>
           </el-upload>
           <br>
-          <el-button @click="applyLink" color="#8166e7">提交申请链接</el-button>
+          <el-button @click="applyLink" color="#8166e7" v-if="load===0">提交申请链接</el-button>
+          <el-button v-if="load===1" loading></el-button>
         </div>
         <div class="right">
           <h1>我的申请</h1>
@@ -201,7 +202,7 @@ export default {
         return false
       }
     }
-
+    const load = ref(0)
     async function applyLink() {
       let value = form.value;
       if (!value.linkUrl) {
@@ -252,6 +253,7 @@ export default {
         }
       }
       try {
+        load.value = 1
         const promise = await ApplyLink(formData);
         if (!promise){
           ElNotification({
@@ -291,6 +293,7 @@ export default {
       handle,
       imageUrl,
       deleteLink,
+      load
     }
   }
 }
