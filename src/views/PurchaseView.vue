@@ -144,6 +144,7 @@ import router from "@/router";
 import ViewState from "@/components/ViewState.vue";
 import LoginDialog from "@/components/LoginDialog.vue";
 import store from "@/store";
+import LeftNavigationBar from "@/App.vue";
 
 export default {
   name: "PurchaseView",
@@ -152,7 +153,7 @@ export default {
       return store;
     },
   },
-  components: { LoginDialog, ViewState, CircleCheckFilled, CashRegister },
+  components: {LeftNavigationBar, LoginDialog, ViewState, CircleCheckFilled, CashRegister },
   methods: {
     router() {
       return router;

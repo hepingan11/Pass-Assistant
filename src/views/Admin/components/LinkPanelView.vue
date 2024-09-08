@@ -67,6 +67,10 @@
             取消热门
           </el-button>
         </div>
+
+      </div>
+      <div v-if="linkList.length === 0" style="text-align: center; margin-top: 100px">
+        好像没有数据呃の
       </div>
     </div>
   </div>
@@ -109,21 +113,12 @@
         window.open(url,'_blank');
       }
 
-      function setCss() {
-        let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
-        if (flag){
-          let byClass = document.getElementsByClassName('news-item')[0].style
-          byClass.flexDirection = 'column';
-          byClass.height = '29vh';
-        }
-      }
 
       onMounted( () =>{
         if (store.getters.userinfo && store.getters.userinfo.type === "ADMIN") {
           imageUrl.value = process.env.VUE_APP_IMAGE;
           getTopImg();
           LinkList();
-          setCss();
         }
       })
 
@@ -191,18 +186,13 @@
 
 <style scoped>
 .body{
+  background-color: var(--bgColor2);
   scroll-behavior: smooth;
   width: 100%;
   flex-direction: column;
   align-items: center;
   display: flex;
   overflow: auto;
-}
-
-.news-content{
-  display: flex;
-  flex-direction: column;
-  width: 100%;
 }
 
 .news-item {

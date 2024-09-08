@@ -9,6 +9,20 @@
             v-model="form.sdUrl"
           />
         </el-form-item>
+        <el-form-item label="是否开启SD绘画" label-width="200px">
+          <el-select
+              v-model="form.sdButton"
+              placeholder="Select"
+              style="width: 200px"
+          >
+            <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="智能GPT对话请求链" label-width="200px">
           <el-input
             placeholder="请设置GPT请求链"
@@ -33,46 +47,11 @@
             v-model="form.openPlusKey"
           />
         </el-form-item>
-        <el-form-item label="必应密钥" label-width="200px">
-          <el-input
-            placeholder="请设置密钥"
-            clearable
-            v-model="form.newBingCookie"
-          />
-        </el-form-item>
         <el-form-item label="链接顶图" label-width="200px">
           <el-input
               placeholder="请设置图片链接"
               clearable
               v-model="form.linkTopImg"
-          />
-        </el-form-item>
-        <el-form-item label="Claude原ID" label-width="200px">
-          <el-input
-            placeholder="请设置organizationUuid"
-            clearable
-            v-model="form.organizationUuid"
-          />
-        </el-form-item>
-        <el-form-item label="Claude连ID" label-width="200px">
-          <el-input
-            placeholder="请设置conversationUuid"
-            clearable
-            v-model="form.conversationUuid"
-          />
-        </el-form-item>
-        <el-form-item label="链接顶图" label-width="200px">
-          <el-input
-              placeholder="请设置图片链接"
-              clearable
-              v-model="form.linkTopImg"
-          />
-        </el-form-item>
-        <el-form-item label="Claude密钥" label-width="200px">
-          <el-input
-            placeholder="请设置sessionKey"
-            clearable
-            v-model="form.sessionKey"
           />
         </el-form-item>
         <el-form-item label="智能对话消耗次数" label-width="200px">
@@ -153,25 +132,32 @@ export default {
   },
   setup() {
     const form = ref({
+      sdButton: "",
       sdUrl: "",
       openAiUrl: "",
       openAiPlusUrl: "",
       openKey: "",
       openPlusKey: "",
       gptPlusFrequency: undefined,
-      newBingCookie: "",
       incentiveFrequency: undefined,
       videoFrequency: undefined,
       signInFrequency: undefined,
       sdImageFrequency: undefined,
       gptFrequency: undefined,
       gptTextImageFrequency: undefined,
-      organizationUuid: "",
-      conversationUuid: "",
-      sessionKey: "",
       linkTopImg: "",
     });
 
+    const options = ref([
+      {
+        value: '1',
+        label: '开'
+      },
+      {
+        value: '0',
+        label: '关'
+      }
+    ])
     onMounted(() => {
       if (store.getters.userinfo && store.getters.userinfo.type === "ADMIN") {
         getServerConfig();
@@ -191,7 +177,7 @@ export default {
         if (!value[key]) {
           ElNotification({
             title: "错误",
-            message: key + "不能为空",
+            message: key + "不能为空(没有的话就写个1)",
             type: "error",
           });
           return;
@@ -225,6 +211,7 @@ export default {
     return {
       onSubmit,
       form,
+      options
     };
   },
 };

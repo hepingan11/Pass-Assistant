@@ -29,6 +29,9 @@
         <el-tab-pane label="链接管理" name="eighth">
           <link-panel-view />
         </el-tab-pane>
+        <el-tab-pane label="作品管理" name="ninth">
+          <work-panel-view />
+        </el-tab-pane>
       </el-tabs>
       <div v-else class="no_data">
         <ViewState class="state" Type="error" ErrorText="当前页面不见了" />
@@ -49,10 +52,12 @@ import OrdersDataView from "@/views/Admin/components/OrdersDataView.vue";
 import ViewState from "@/components/ViewState.vue";
 import ControlPanelView from "@/views/Admin/components/ControlPanelView.vue";
 import LinkPanelView from "@/views/Admin/components/LinkPanelView.vue";
+import WorkPanelView from "@/views/Admin/components/WorkPanelView.vue";
 
 export default {
   name: "PromptList",
   components: {
+    WorkPanelView,
     LinkPanelView,
     ControlPanelView,
     ViewState,

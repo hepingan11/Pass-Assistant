@@ -47,6 +47,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <div style="display: flex; justify-content: right; padding-top: 10px">
       <el-pagination
         layout="prev, pager, next"

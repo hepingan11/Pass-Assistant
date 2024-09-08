@@ -94,7 +94,14 @@
             >
               GO
             </el-button>
-            <el-icon v-if="userStatLink.includes(item)" color="var(--themeColor2)" @click="cancelLinkStat(item.linkId)"><StarFilled /></el-icon>
+            <el-tooltip
+                class="box-item"
+                effect="dark"
+                content="取消收藏"
+                placement="top-start"
+            >
+              <el-icon v-if="userStatLink.includes(item)" color="var(--themeColor2)" @click="cancelLinkStat(item.linkId)"><StarFilled /></el-icon>
+            </el-tooltip>
           </div>
         </div>
 
@@ -121,7 +128,14 @@
             >
               GO
             </el-button>
-            <el-icon v-if="item.linkSort === 'work'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+            <el-tooltip
+                class="box-item"
+                effect="dark"
+                content="收藏"
+                placement="top-start"
+            >
+              <el-icon v-if="item.linkSort === 'work'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+            </el-tooltip>
           </div>
         </div>
 
@@ -149,7 +163,14 @@
             >
               GO
             </el-button>
-            <el-icon v-if="item.linkSort === 'ai'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+            <el-tooltip
+                class="box-item"
+                effect="dark"
+                content="收藏"
+                placement="top-start"
+            >
+              <el-icon v-if="item.linkSort === 'ai'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+            </el-tooltip>
           </div>
         </div>
 
@@ -176,7 +197,14 @@
             >
               GO
             </el-button>
-            <el-icon v-if="item.linkSort === 'tool'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+            <el-tooltip
+                class="box-item"
+                effect="dark"
+                content="收藏"
+                placement="top-start"
+            >
+              <el-icon v-if="item.linkSort === 'tool'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+            </el-tooltip>
           </div>
         </div>
 
@@ -203,7 +231,14 @@
             >
               GO
             </el-button>
-            <el-icon v-if="item.linkSort === 'tech'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+            <el-tooltip
+                class="box-item"
+                effect="dark"
+                content="收藏"
+                placement="top-start"
+            >
+              <el-icon v-if="item.linkSort === 'tech'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+            </el-tooltip>
           </div>
         </div>
 
@@ -230,7 +265,14 @@
             >
               GO
             </el-button>
-            <el-icon v-if="item.linkSort === 'other'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+            <el-tooltip
+                class="box-item"
+                effect="dark"
+                content="收藏"
+                placement="top-start"
+            >
+              <el-icon v-if="item.linkSort === 'other'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
+            </el-tooltip>
           </div>
         </div>
       </div>

@@ -8,7 +8,6 @@
       >新增模型
       </el-button
       >
-      是否开启Ai绘画：<el-switch v-model="isOn" />
 
     </div>
     <el-table
@@ -136,7 +135,6 @@ export default {
 
 
     const globalData = inject('globalData');
-    const isOn = globalData.sharedVariable;
 
     async function handleAddSdModel() {
       const {modelName, textName} = form.value;
@@ -261,7 +259,6 @@ export default {
       handleAddSdModel,
       form,
       globalData,
-      isOn,
 
     };
   },

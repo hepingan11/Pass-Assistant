@@ -39,11 +39,7 @@ let app = createApp(App)
 // v-md-editor
 app.use(VMdEditor);
 
-const globalData = {
-    sharedVariable: false, // 您想要共享的变量
-};
 
-app.provide('globalData', globalData);
 app.use(router)
 app.use(store)
 app.use(ElementPlus)

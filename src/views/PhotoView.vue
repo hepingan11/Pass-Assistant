@@ -1,146 +1,185 @@
 <template>
   <div class="body">
-    <el-upload
-        drag
-        multiple
-        class="upload-demo"
-        :on-change="onChange"
-        list-type="picture"
-    >
-      <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-      <div class="el-upload__text">
-        Drop file here or <em>click to upload</em>
-      </div>
-      <template #tip>
-        <div class="el-upload__tip">
-          jpg/png files with a size less than 500kb
+    <div class="upload">
+      <!-- 上传组件 -->
+      <el-upload
+          class="upload-demo"
+          drag
+          multiple
+          ref="uploadRef"
+          :action="null"
+          :on-remove="removeImg"
+        :auto-upload="false"
+        :on-change="handleChange"
+        :file-list="fileList"
+        list-type="picture-card"
+      >
+        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+        <div class="el-upload__text">
+          拖拽到此 或 <em>点击上传</em>
         </div>
-      </template>
-    </el-upload>
+        <template #tip>
+          <div class="el-upload__tip" style="margin-top: 57px">
+            只能上传图片且小于5MB
+          </div>
+        </template>
+      </el-upload>
 
-    <el-button type="primary" @click="uploadFile" color="var(--themeColor2)" style="margin-left: 50%">上传</el-button>
-    <el-divider/>
-    <div class="container">
-      <span v-for="item in tempFileList" :key="item" class="img-part">
-        <div class="item">
-          <img v-if="item" :src="item" class="img"/>
-        </div>
-      </span>
+      <!-- 上传按钮 -->
+      <el-button @click="handleUpload" color="var(--themeColor1)" style="margin-top: 40px">上传所有图片</el-button>
     </div>
+    <div class="imgList">
+      <div v-for="item in imgList" :key="item" style="margin-top: 10px">
+        <el-image :src=imgLink+item.url class="img-item" lazy :preview-src-list="[imgLink+item.url]"></el-image>
+        <el-button class="preview-button" color="var(--themeColor1)" @click="copyUrl(item.url)"><el-icon><Document /></el-icon></el-button>
+        <el-button class="delete-button" color="var(--themeColor1)" @click="deleteImg(item.photoId)"><el-icon><DeleteFilled /></el-icon></el-button>
+      </div>
+    </div>
+    <p style="margin-top: 200px;color: #7c7c7c;font-size: 10px">图床由阿里云oss支持，防刷所以一个人最多只能存储20张~</p>
   </div>
+  <el-dialog v-model="dialog" title="确认删除？" width="400">
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialog = false">Cancel</el-button>
+        <el-button type="primary" @click="deleteImgReal" color="var(--themeColor1)">
+          Yes
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <LoginDialog :show="loginVisible" @close="loginVisible = false"/>
 </template>
 
-<script>
-import store from "@/store";
-import {ElNotification} from "element-plus";
-import {ref} from "vue";
-
-export default({
-  name: "PhotoView",
-  computed: {
-    store() {
-      return store;
-    },
-  },
-  setup(){
-    const tempFileList = ref([])
+<script setup>
+import {ElLoading, ElMessage, ElNotification} from "element-plus";
+import {onMounted, ref} from "vue";
+import {DeleteImgById, GetUserImgList, UploadFile} from "../../api/BSideApi";
+import LoginDialog from "@/components/LoginDialog.vue";
+import router from "@/router";
 
 
-    function onChange(e) {
-      console.log(e.raw.type)
-      if (e.raw.type === 'image/jpg' || e.raw.type === 'image/png' || e.raw.type === 'image/jpeg') {
-        if (e.raw.size / 1024 / 1024 > 5) {
-          ElNotification({
-            title: "错误",
-            message: '图片大小不得超过5MB',
-            type: "error",
-          });
-          return false
-        }
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            tempFileList.value.push(event.target.result);
-            // tempFileList.value.pop();
-            console.log(e)
-            console.log(tempFileList)
-            resolve(e);
-          };
-          reader.onerror = (error) => {
-            reject(error);
-          };
-          reader.readAsDataURL(e.raw);
-        });
-      } else {
-        ElNotification({
-          title: "错误",
-          message: '请上传正确的图片',
-          type: "error",
-        });
-        return false
-      }
-    }
-
-    async function uploadFile() {
-      const v = await UploadFile(tempFileList.value)
-    }
-
-    return {
-      onChange,
-      tempFileList,
-      uploadFile,
-    }
+const fileList = ref([])
+const uploadRef = ref(null)
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+// 处理文件选择事件
+const handleChange = (file) => {
+  if (file.size > MAX_FILE_SIZE) {
+    ElMessage.warning(`文件 ${file.name} 大小超过限制，请选择小于5MB的图片！`)
+    return
   }
+  if (fileList.value.length === 5) {
+    ElMessage.warning("一次性最多只能上传5张(虽然显示还可以上传其实不行了)")
+    return
+  }
+  fileList.value.push(file)
+  console.log(fileList)
+}
+let loginVisible = ref(false);
+// 处理上传逻辑
+const handleUpload = async () => {
+  const loading = ElLoading.service({
+    text: '正在上传...',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+
+  try {
+    // 假设这里有一个上传接口
+    // 模拟上传请求
+    const formData = new FormData();
+    // 添加自定义参数到 FormData
+    fileList.value.forEach((file) => {
+      formData.append('files', file.raw, file.name)
+    })
+    await UploadFile(formData)
+
+    ElMessage.success('上传成功')
+    fileList.value = []  // 清空已上传的文件列表
+  } catch (error) {
+    ElMessage.error('上传失败')
+  } finally {
+    loading.close()
+  }
+  router.go(0);
+}
+const imgList = ref([])
+
+const dialog = ref(false)
+const imgId = ref(null)
+function deleteImg(id){
+  imgId.value = id
+  dialog.value = true
+}
+
+async function deleteImgReal() {
+  await DeleteImgById(imgId.value);
+  dialog.value = false
+  ElMessage.success("删除成功")
+  router.go(0);
+}
+const removeImg = (file) =>{
+  fileList.value.filter((v) => v === file)
+}
+
+const imgLink = ref('')
+
+function copyUrl(url) {
+  const v = imgLink.value+url;
+  navigator.clipboard.writeText(v);
+  ElNotification({
+    message: "复制链接成功",
+    type: "success",
+  });
+}
+
+onMounted(async () => {
+  imgList.value = await GetUserImgList();
+  imgLink.value = process.env.VUE_APP_IMAGE;
 })
 </script>
 
-<style scoped>
-.app {
-  display: flex;
-  height: 100%;
-  width: 100%;
-  background-color: var(--bgColor2);
+<style lang="scss" scoped>
+
+@keyframes explainAnimation {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
 }
 
-.body {
-  width: 100%;
+.body{
+  margin: 0;
   height: 100%;
+  text-align: center;
+  animation: explainAnimation 0.3s;
   box-sizing: border-box;
-  flex-direction: column;
-  align-items: center;
-  display: flex;
-  overflow: auto;
-  background: linear-gradient(to bottom right, var(--bgColor1), var(--bgColor2),var(--bgColor3));
-  background-size: 200% 200%;
-  animation: gradient 8s ease infinite;
+  overflow-y: auto;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
+.imgList{
+  margin-top: 50px;
+  position: relative;
 }
 
-.img-part {
-  margin-top: 20px;
-  display: flex;
-  //width: 80%;
-  //height: 120px;
-  background-color: #7c7c7c;
+.img-item{
   border-radius: 10px;
-  flex-wrap: nowrap; /* 不允许子元素换行，因为已经在计算属性中处理了换行 */
+  width: 80%;
+  max-width: 500px;
+  max-height: 500px;
 }
 
-.item {
-  margin: 5px;
-  flex-shrink: 0; /* 防止子元素缩小，确保每个元素占据固定宽度 */
-  width: calc(100% / 3 - 10px); /* 根据每行元素数量动态计算宽度，减去margin和border */
+.preview-button{
+  position: absolute;
+  margin-left: -35px;
+  margin-top: 2px;
 }
 
-.img {
-  margin-top: 10px;
-  height: 100px;
-  width: auto;
+.delete-button{
+  position: absolute;
+  margin-left: -35px;
+  margin-top: 37px;
 }
-
-
 </style>

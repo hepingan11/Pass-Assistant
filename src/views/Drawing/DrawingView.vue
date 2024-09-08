@@ -32,9 +32,7 @@
                     v-model="form.prompt"
                 ></el-input>
               </div>
-              <div class="read">
-                <el-tag type="danger" effect="dark" color="var(--themeColor2)" round>Tag 5</el-tag>
-              </div>
+
               <div class="header">
                 <div class="title">
                   <span>反向提示词(可选)</span>
@@ -302,12 +300,10 @@
 
             <el-scrollbar height="500px" v-if="showPrivate === 1">
               <p v-for="item in imageList" :key="item" class="scrollbar-demo-item">
-                <el-image class="own-image" :src="imageUrl+item" fit="cover" :preview-src-list="[imageUrl+item]"></el-image><br/>
-                <el-button @click="deleteImg(item)" type="primary">删除图片</el-button>
+                <el-image class="own-image" :src="imageUrl+item.generateUrl" fit="cover" :preview-src-list="[imageUrl+item]"></el-image><br/>
+                <el-button @click="deleteImg(item.drawingId)" type="primary" color="var(--themeColor1)" style="margin-left: 8px;"><el-icon><Delete /></el-icon></el-button>
               </p>
             </el-scrollbar>
-
-
 
             <div style="text-align: center;font-size: 13px;margin-top: 20px;font-weight: 500;color: #888888">
               <el-button @click="getPublicOps" color="var(--themeColor2)" type="primary">随机浏览</el-button>
@@ -347,13 +343,13 @@
 </template>
 
 <script>
-import {inject, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 
 import LoginDialog from "@/components/LoginDialog.vue";
 import {InfoFilled, Plus} from "@element-plus/icons-vue";
 
 import {
-  deleteImgByurl,
+  CheckSdConnectivity, DeleteImgByurl,
   GetPublicRandomOps,
   GetSdModelList, getUserDraw,
   postSdDraw,
@@ -483,18 +479,17 @@ export default {
       }
     })
 
-    function checkTrue(){
-      const globalData = inject('globalData');
-      ElNotification({
-        title: "Ai绘画暂停服务",
-        message: "由于资金原因，ai绘画暂时暂停服务,国赛的时候再开",
-        type: "error",
-      });
-      // 获取变量的值
-      // const value = globalData.sharedVariable;
-      // if (value) {
+    async function checkTrue() {
+      const v = ref('');
+      v.value = await CheckSdConnectivity();
+      if (v.value === '0') {
+        ElNotification({
+          title: "Ai绘画暂停服务",
+          message: "由于资金原因，ai绘画暂时暂停服务",
+          type: "error",
+        });
+      }
 
-        // });
     }
 
     async function sdConnect() {
@@ -573,21 +568,6 @@ export default {
       }
     }
 
-
-    // function decodeBase64Image(base64) {
-    //   const img = new Image();
-    //   img.onload = () => {
-    //     const canvas = document.createElement('canvas');
-    //     canvas.width = img.width;
-    //     canvas.height = img.height;
-    //     const ctx = canvas.getContext('2d');
-    //     ctx.drawImage(img, 0, 0);
-    //     const dataURL = canvas.toDataURL('image/png');
-    //     imgUrl.value = dataURL;
-    //     console.log(dataURL)
-    //   };
-    //   img.src = 'data:image/jpeg;base64,' + base64;
-    // }
 
     const image = ref('')
 
@@ -669,15 +649,12 @@ export default {
       }
     }
 
-    function deleteImg(url) {
-      if (deleteImgByurl(url)) {
+    async function deleteImg(id) {
+      const v = ref('')
+      v.value = await DeleteImgByurl(id)
+      {
         ElMessage({
-          message: '对了.',
-          type: 'success',
-        })
-      } else {
-        ElMessage({
-          message: '错了',
+          message: '删除成功.',
           type: 'success',
         })
       }

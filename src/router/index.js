@@ -46,17 +46,6 @@ const routes = [{
         }
     },
     {
-        path: "/drawing_text_view",
-        name: "SD DRAWING",
-        component: () => import('../views/Drawing/DrawingTextView.vue'),
-        meta: {
-            title: '绘图',
-            isHeadNavigation: true,
-            keepAlive: true,
-            isLeftMenu: false
-        },
-    },
-    {
         path: "/drawing_view",
         name: "NEW DRAWING",
         component: () => import('../views/Drawing/DrawingView.vue'),
@@ -145,28 +134,6 @@ const routes = [{
         }
     },
     {
-        path: "/bing_view",
-        name: "BingView",
-        component: () => import('../views/BingView.vue'),
-        meta: {
-            title: '必应对话',
-            isHeadNavigation: true,
-            keepAlive: true,
-            isLeftMenu: true
-        }
-    },
-    {
-        path: "/claude_view",
-        name: "ClaudeView",
-        component: () => import('../views/ClaudeView.vue'),
-        meta: {
-            title: 'Claude对话',
-            isHeadNavigation: true,
-            keepAlive: true,
-            isLeftMenu: true
-        }
-    },
-    {
         path: "/digital_view",
         name: "DigitalView",
         component: () => import('../views/DigitalView.vue'),
@@ -218,7 +185,7 @@ const routes = [{
         meta: {
             title: '链接',
             isHeadNavigation: true,
-            keepAlive: true,
+            keepAlive: false,
             isLeftMenu: false
         }
     },
@@ -307,6 +274,17 @@ const routes = [{
             title: '图床',
             isHeadNavigation: true,
             keepAlive: true,
+            isLeftMenu: true
+        }
+    },
+    {
+        path: '/funny',
+        name: 'FunnyView',
+        component: () => import('@/views/FunnyView.vue'),
+        meta: {
+            title: '视觉盛宴',
+            isHeadNavigation: true,
+            keepAlive: false,
             isLeftMenu: false
         }
     }
@@ -327,7 +305,7 @@ router.beforeEach(async (to) => {
     })
 
     // TODO 设置浏览器Title
-    document.title = (to.meta.title ? to.meta.title : '') + ' - H公司管理系统'
+    document.title = (to.meta.title ? to.meta.title : '') + ' - Pass Assistant'
 })
 
 export default router

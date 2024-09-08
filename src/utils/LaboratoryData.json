@@ -70,34 +70,24 @@
     "path": "/passnews_view"
   },
   {
+    "icon": "LogosBlender.svg",
+    "title": "Spline",
+    "introduce": "你问我spline为啥要用blender的logo，因为我只会用blender建模",
+    "label": [
+      "3D",
+      "业余"
+    ],
+    "path": "/funny"
+  },
+  {
     "icon": "ball.svg",
-    "title": "AIGC新闻",
+    "title": "我的博客",
     "introduce": "收集了最新|实用|热门的AIGC前沿知识",
     "label": [
       "NEWS",
       "社区"
     ],
     "path": "/aigc_view"
-  },
-  {
-    "icon": "bing.svg",
-    "title": "NEW BING",
-    "introduce": "微软基于GPT4模型实现的搜索引擎算法和人工智能技术(可能回复失败)",
-    "label": [
-      "免费使用",
-      "联网"
-    ],
-    "path": "/bing_view"
-  },
-  {
-    "icon": "claude.svg",
-    "title": "CLAUDE",
-    "introduce": "Anthropic开发的大语言Ai模型Claude 2(可能回复失败)",
-    "label": [
-      "免费使用",
-      "智能"
-    ],
-    "path": "/claude_view"
   },
   {
     "icon": "creation.svg",
@@ -112,7 +102,7 @@
   {
     "icon": "audio.svg",
     "title": "图床",
-    "introduce": "公用图床分享",
+    "introduce": "我的免费图床",
     "label": [
       "图床",
       "public"

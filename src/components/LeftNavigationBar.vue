@@ -33,14 +33,54 @@
       </div>
 
       <div class="bottom">
-        <el-avatar
-            :size="40"
-            :icon="UserFilled"
-            :src="require('../assets/hh.jpg')"
-        />
+        <el-popover
+            placement="top-start"
+            :width="400"
+            trigger="hover"
+        >
+          <template #reference>
+            <el-avatar
+                :size="40"
+                :icon="UserFilled"
+                :src="require('../assets/hh.jpg')"
+            />
+          </template>
+            <div
+                class="demo-rich-conent"
+                style="display: flex; gap: 16px; flex-direction: column">
+              <h2>
+                更新日志
+                <el-icon><ChatLineRound /></el-icon>
+              </h2>
+              <p style="margin: 0;">
+                1.0.0基于Time sea作者开源项目进行搭建,并修改了logo等;
+                <span style="font-size: 10px;color: #7c7c7c">--2024.2.6</span>
+              </p>
+              <p style="margin: 0">
+                2.0.0对整体项目进行二次大改造，SD Ai绘画魔改，预设角色增多，新增数字人平台|个人中心|我的博客,删掉了claude和必应,此作品入围全高计设赛国赛;
+                <span style="font-size: 10px;color: #7c7c7c">--2024.5.1</span>
+              </p>
+              <p style="margin: 0">
+                2.1.0上新外链推荐,控制台新增外链管理；
+                <span style="font-size: 10px;color: #7c7c7c">--2024.6.6</span>
+              </p>
+              <p style="margin: 0">
+                2.2.0新增我们学校的智慧派斯和大数据专区,通过python爬取数据,从此项目变三端(Java,Vue,Python)；
+                <span style="font-size: 10px;color: #7c7c7c">--2024.6.17</span>
+              </p>
+              <p style="margin: 0">
+                2.3.0新增我的作品|图床模块|对应管理模块;
+                <span style="font-size: 10px;color: #7c7c7c">--2024.9.7</span>
+              </p>
+              <p style="margin: 0">
+                2.4.0修复完善Sd绘画，可控制开启Sd绘画，项目bug数减为0;
+                <span style="font-size: 10px;color: #7c7c7c">--2024.9.9</span>
+              </p>
+            </div>
+        </el-popover>
         <div class="bottomRight">
-          <div class="bottomRightName">PASS Technology</div>
-          <div class="bottomRightEdition">v2.0.0</div>
+          <div class="bottomRightName">PASS Assistant</div>
+          <div class="bottomRightEdition">v2.3.0 2024.9.8</div>
         </div>
       </div>
       <div class="control-display" @click="controlDisplay=!controlDisplay">
@@ -74,7 +114,14 @@
 import {defineComponent, onMounted, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 // eslint-disable-next-line no-unused-vars
-import {ChatDotSquare, MessageBox, Odometer, ScaleToOriginal, SemiSelect, UserFilled,} from "@element-plus/icons-vue";
+import {
+  ChatDotSquare, Iphone,
+  MessageBox,
+  Odometer,
+  PictureFilled,
+  ScaleToOriginal,
+  UserFilled,
+} from "@element-plus/icons-vue";
 import router from "@/router";
 import store from "../store";
 import LoginDialog from "@/components/LoginDialog.vue";
@@ -124,9 +171,14 @@ export default defineComponent({
         to: "/laboratory",
       },
       {
-        title: "数字人平台",
-        icon: UserFilled,
-        to: "/digital_view"
+        title: "图床",
+        icon: PictureFilled,
+        to: "/photo_view"
+      },
+      {
+        title: "外链模块",
+        icon: Iphone,
+        to: "/link_view"
       }
     ]);
     const isLeftMenu = ref(true);

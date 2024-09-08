@@ -1,6 +1,17 @@
 <template>
   <div class="body" ref="scrollRef">
     <div v-if="!conversationList.length" class="explain">
+      <div style="display: flex">
+        <div  style="margin-top: -15%;flex: 1;text-align: center">
+          <el-image @click="router().push({ path: '/funny' })" style="border-radius: 10px;width: 20%;height: auto;min-width: 180px" class="top-img" src="https://img-hepingan.oss-cn-hangzhou.aliyuncs.com/page/e2a2c9dbde45ebf956b0b9a5483a9043.jpg"></el-image>
+          <p @click="router().push({ path: '/funny' })" class="recommended-text">我的作品上新</p>
+        </div>
+        <div style="margin-top: -15%;flex: 1;text-align: center;">
+          <el-image @click="handle" style="border-radius: 10px;width: 20%;height: auto;min-width: 180px" class="top-img" src="https://img-hepingan.oss-cn-hangzhou.aliyuncs.com/page/b90972d0364169812ad4d4f4fccbf9da.jpg"></el-image>
+          <p @click="handle" class="recommended-text">我的博客</p>
+        </div>
+      </div>
+
       <img class="logo" alt="Vue logo" src="../assets/passlogo.png"/>
       <div class="expositoryCase">欢迎使用-Pass Assistant</div>
       <div class="consume">
@@ -227,10 +238,14 @@ import LoginDialog from "@/components/LoginDialog.vue";
 import InputFormField from "@/components/InputFormField.vue";
 import store from "@/store";
 import {conversionTime} from "../utils/date";
+import router from "@/router";
 
 export default {
   name: "dialogueView",
-  methods: {conversionTime},
+  methods: {
+    router() {
+      return router
+    }, conversionTime},
   components: {
     StarFilled,
     CopyDocument,
@@ -655,7 +670,12 @@ export default {
       }
     }
 
+    function handle(){
+      window.open('https://ai.hepingan.top','_blank')
+    }
+
     return {
+      handle,
       handleKeyDown,
       inputRef,
       model,
@@ -1186,5 +1206,18 @@ export default {
     transform: scale(1);
     background-color: rgb(186, 156, 241);
   }
+}
+
+.recommended-text {
+  font-size: 20px;
+  margin-top: -1px;
+}
+
+.recommended-text:hover {
+  color: var(--themeColor1);
+}
+
+.top-img:hover {
+  border: var(--bgColor3) 5px solid;
 }
 </style>

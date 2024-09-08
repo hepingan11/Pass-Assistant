@@ -16,3 +16,5 @@ npm run build
 ```
 
 如果你喜欢这个项目还请 点个star
+
+Java后端项目：https://gitee.com/hepingan11/gptjava

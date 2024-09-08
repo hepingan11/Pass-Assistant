@@ -40,28 +40,10 @@ export function SdConnectivity() {
 }
 
 
-export function GetDrawingDataResult(data) {
+export function CheckSdConnectivity() {
     return request({
-        url: '/drawing/image/data/'+data,
+        url: '/draw/sd/connectivity',
         method: 'GET'
-    })
-}
-
-export function GetDrawingResult(data) {
-    return request({
-        url: '/drawing/status/'+data,
-        method: 'GET'
-    })
-}
-
-export function DrawingSdTask(data) {
-    return request({
-        url: '/drawing/sd/drawing/image',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        data
     })
 }
 
@@ -482,10 +464,10 @@ export function getUserDraw() {
     })
 }
 
-export function deleteImgByurl(data) {
+export function DeleteImgByurl(data) {
     return request({
-        url: '/draw/deleteDraw/'+ data,
-        method: 'POST'
+        url: '/draw/deleteDraw/'+data,
+        method: 'POST',
     })
 }
 
@@ -636,8 +618,51 @@ export function getShopInfo() {
 
 export function UploadFile(data){
     return request({
-        url: '/photo/upload8',
+        url: '/photo/upload',
         method: 'POST',
         data
+    })
+}
+
+export function GetUserImgList(){
+    return request({
+        url: '/photo/getUserList',
+        method: 'GET'
+    })
+}
+
+export function DeleteImgById(data){
+    return request({
+        url: '/photo/delete/' + data,
+        method: 'POST'
+    })
+}
+
+export function GetWorkList(){
+    return request({
+        url: '/funny/work/get',
+        method: 'GET'
+    })
+}
+
+export function AddWork(name,url,sort){
+    return request({
+        url: '/funny/work/add?name='+ name +'&sort='+sort +'&url='+ url,
+        method: 'POST'
+    })
+}
+
+export function UpdateWork(data){
+    return request({
+        url: '/funny/work/update',
+        method: 'POST',
+        data
+    })
+}
+
+export function DeleteWork(id){
+    return request({
+        url: '/funny/work/delete/'+id,
+        method: 'POST',
     })
 }
