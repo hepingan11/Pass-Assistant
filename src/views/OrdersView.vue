@@ -54,7 +54,7 @@
         >
           <el-table-column prop="ordersId" label="订单号" />
           <el-table-column prop="productName" label="商品名称" />
-          <el-table-column prop="frequency" label="获赠Ai币" />
+          <el-table-column prop="frequency" label="获赠IT币" />
           <el-table-column prop="productPrice" label="价格" />
           <el-table-column prop="payTime" label="支付时间" />
           <el-table-column prop="state" label="支付状态" />

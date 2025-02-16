@@ -30,6 +30,16 @@
     "path": "/create"
   },
   {
+    "icon": "selected.svg",
+    "title": "我的收藏",
+    "introduce": "就是你的问答收藏",
+    "label": [
+      "问答",
+      "收藏"
+    ],
+    "path": "/Collection"
+  },
+  {
     "icon": "personality.svg",
     "title": "私人GPT",
     "introduce": "自定义GPT的输出行为以及各类参数",
@@ -38,16 +48,6 @@
       "个性化"
     ],
     "path": "/personality_view"
-  },
-  {
-    "icon": "neutral-face.svg",
-    "title": "数字人平台",
-    "introduce": "基于GPT-Sovits+DiD数字人生成+chatgpt3.5模型对话",
-    "label": [
-      "自定义",
-      "智能"
-    ],
-    "path": "/digital_view"
   },
   {
     "icon": "clip.svg",
@@ -80,26 +80,6 @@
     "path": "/funny"
   },
   {
-    "icon": "ball.svg",
-    "title": "我的博客",
-    "introduce": "收集了最新|实用|热门的AIGC前沿知识",
-    "label": [
-      "NEWS",
-      "社区"
-    ],
-    "path": "/aigc_view"
-  },
-  {
-    "icon": "creation.svg",
-    "title": "大数据专区",
-    "introduce": "何平安平时无聊爬的数据",
-    "label": [
-      "站长",
-      "大数据"
-    ],
-    "path": "/data_view"
-  },
-  {
     "icon": "audio.svg",
     "title": "图床",
     "introduce": "我的免费图床",
@@ -108,5 +88,25 @@
       "public"
     ],
     "path": "/photo_view"
+  },
+  {
+    "icon": "LogosItsaliveIcon.svg",
+    "title": "智谱Ai",
+    "introduce": "全新全能ai模块",
+    "label": [
+      "智谱清言",
+      "大模型"
+    ],
+    "path": "/zhipu"
+  },
+  {
+    "icon": "data.svg",
+    "title": "我的数据",
+    "introduce": "根据您在站内的数据展示",
+    "label": [
+      "数据可视化",
+      "Data"
+    ],
+    "path": "/mydata"
   }
 ]

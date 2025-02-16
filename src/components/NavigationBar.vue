@@ -16,7 +16,8 @@
             active-class="switch-active"
             class="switch-item"
             :to="item.to"
-            >{{ item.title }}
+          >
+            {{ item.title }}
           </router-link>
         </block>
       </div>
@@ -135,13 +136,13 @@
 
   <el-dialog
     v-model="appletDialogVisible"
-    title="天香园--by HePingAn"
+    title="Pass Assistant"
     width="300"
     center
     align-center
   >
     <div class="wxAppletCodeRow">
-      <img class="wxAppletCode" :src="require('../assets/passlogo.png')" />
+      <img class="wxAppletCode" :src="require('../assets/logo.png')" />
       <div>微信小程序正在开发中...</div>
     </div>
   </el-dialog>
@@ -199,8 +200,8 @@ export default defineComponent({
         to: "/laboratory",
       },
       {
-        title: "收藏",
-        to: "/collection",
+        title: "关于",
+        to: "/about",
       },
     ]);
 
@@ -300,41 +301,66 @@ export default defineComponent({
   transform: translate(-50%);
 }
 
+.switch-button {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  transition: all 0.3s ease;
+}
+
+.switch-item {
+  position: relative;
+  padding: 8px 20px;
+  color: var(--textColor2);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    color: var(--themeColor1);
+    background: var(--bgColor2);
+  }
+}
+
+.switch-active {
+  color: var(--themeColor1);
+  background: var(--bgColor2);
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--themeColor1);
+    border-radius: 2px;
+    opacity: 0;
+    animation: slideIn 0.3s ease forwards;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 5px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
 @media only screen and (max-width: 767px) {
   .header-center {
     left: 16px;
     transform: translate(0);
   }
-}
-
-.switch-button {
-  color: var(--textColor1);
-  box-sizing: border-box;
-  height: 34px;
-  background: var(--bgColor3);
-  border-radius: 7px;
-  align-items: center;
-  padding: 0 2px;
-  display: flex;
-}
-
-.switch-item {
-  height: 30px;
-  cursor: pointer;
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  font-weight: 500;
-  display: flex;
-  color: var(--textColor1);
-  text-decoration: none;
-  box-sizing: border-box;
-  padding: 0 16px;
-}
-
-.switch-active {
-  background: var(--bgColor1);
 }
 
 .header-side {

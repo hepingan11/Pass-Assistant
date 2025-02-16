@@ -229,7 +229,7 @@ export function PutServerConfig(data) {
 
 
 /**
- *    修改用户Ai币
+ *    修改用户IT币
  */
 export function UpdateUserInfo(data) {
     return request({
@@ -638,6 +638,20 @@ export function DeleteImgById(data){
     })
 }
 
+export function TogglePhotoPublic(photoId){
+    return request({
+        url: '/photo/setPhotoPublic/' + photoId,
+        method: 'POST'
+    })
+}
+
+export function GetAllImgList(){
+    return request({
+        url: '/photo/getAllImgList',
+        method: 'GET'
+    })
+}
+
 export function GetWorkList(){
     return request({
         url: '/funny/work/get',
@@ -664,5 +678,34 @@ export function DeleteWork(id){
     return request({
         url: '/funny/work/delete/'+id,
         method: 'POST',
+    })
+}
+
+export function GetDigitalData(no,size){
+    return request({
+        url: '/data/getDialogueData/page?no='+no+'&size='+size,
+        method: 'GET'
+    })
+}
+
+export function GetContentCloud(){
+    return request({
+        url: '/data/getContentCloud',
+        method: 'GET'
+    })
+}
+
+export function GetMessageCloud(){
+    return request({
+        url: '/data/getMessageCloud',
+        method: 'GET'
+    })
+}
+
+export function SubmitEmail(data){
+    return request({
+        url: '/admin/submitEmail',
+        method: 'POST',
+        data
     })
 }

@@ -2,6 +2,8 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import store from './store'
 import router from './router'
+import axios from './utils/PythonRequest'
+import * as echarts from 'echarts'
 
 // TODO ElementPlus
 import ElementPlus from 'element-plus';
@@ -22,6 +24,8 @@ import 'prismjs/components/prism-json';
 // TODO Copy Code 快捷复制代码
 import createCopyCodePlugin from '@kangc/v-md-editor/lib/plugins/copy-code/index';
 import '@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css';
+import Echarts from 'vue-echarts';
+import 'echarts-wordcloud';
 
 
 //引入axios  by zhengkai.blog.csdn.net
@@ -43,7 +47,10 @@ app.use(VMdEditor);
 app.use(router)
 app.use(store)
 app.use(ElementPlus)
+app.component('e-charts',Echarts)
+app.config.globalProperties.$echarts = echarts
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 app.mount('#app')
+app.config.globalProperties.$axios = axios; //配置axios的全局引用

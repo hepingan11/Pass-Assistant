@@ -11,33 +11,15 @@
             :sm="8"
             :md="6"
           >
-            <div class="item">
+            <div class="item hover-scale">
               <div style="font-size: 50px">
                 {{ item.icon }}
               </div>
               <div>
-                <div
-                  style="
-                    font-weight: 700;
-                    font-size: 16px;
-                    color: var(--textColor1);
-                    padding-top: 10px;
-                  "
-                >
+                <div class="item-title">
                   {{ item.title }}
                 </div>
-                <div
-                  style="
-                    padding-top: 20px;
-                    font-size: 7px;
-                    color: var(--textColor4);
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                  "
-                >
+                <div class="item-intro">
                   {{ item.introduce }}
                 </div>
               </div>
@@ -169,5 +151,33 @@ export default {
     padding-right: 20px;
     box-sizing: border-box;
   }
+}
+
+.hover-scale {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.hover-scale:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.item-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--textColor1);
+  padding-top: 10px;
+}
+
+.item-intro {
+  padding-top: 20px;
+  font-size: 7px;
+  color: var(--textColor4);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

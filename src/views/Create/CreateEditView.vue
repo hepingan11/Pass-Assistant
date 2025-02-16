@@ -74,7 +74,7 @@ export default {
         ElNotification({
           title: "错误",
           message:
-            "SUPER币不足，可前往小程序签到领取，或使用兑换码兑换Ai币，在网页端赞助也可获得Ai币",
+            "IT币不足，可前往小程序签到领取，或使用兑换码兑换IT币，在网页端赞助也可获得IT币",
           type: "error",
         });
         return;

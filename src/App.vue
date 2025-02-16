@@ -10,6 +10,8 @@
     >
       <NavigationBar />
 
+<!--      <Loading ref="loading"/>-->
+
       <LeftNavigationBar />
 
 <!--      <levitation-ball class="hidden-xs-only" />-->
@@ -47,7 +49,7 @@ import { getAnnouncement } from "../api/BSideApi";
 import { onMounted, ref } from "vue";
 
 export default {
-  components: { LeftNavigationBar, NavigationBar },
+  components: {LeftNavigationBar, NavigationBar },
   setup() {
     let store = useStore();
     store.commit("initState");
@@ -234,7 +236,7 @@ body {
 .lightMode {
   --bgColor1: #f5f5f5;
   --bgboxShadowColor1: #cccccc44;
-  --bgColor2: #eee;
+  --bgColor2: #ededed;
   --bgboxShadowColor2: #dddddd44;
   --bgColor3: #adadad;
   --themeColor1: #8166e7;

@@ -1,556 +1,617 @@
 <template>
-  <div class="app">
-    <div class="nav">
-      <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
-          :collapse="isCollapse"
-          background-color="var(--bgColor2)"
-          active-text-color="#e9636c"
-          text-color="var(--themeColor2)"
-      >
-          <el-menu-item index="1" @click="scrollToHot('hot')">
-            <el-icon><HomeFilled /></el-icon>
-            <template #title>热门网址</template>
-          </el-menu-item>
-
-        <el-menu-item index="2" @click="scrollToHot('stat')">
-          <el-icon><StarFilled /></el-icon>
-          <template #title>我的收藏</template>
+  <div class="page-container">
+    <!-- 侧边栏 -->
+    <div class="sidebar" :class="{ 'sidebar-collapsed': isCollapsed }">
+      <div class="logo">
+        <img src="@/assets/logo02.svg" alt="TD导航" class="logo-img">
+      </div>
+      <el-menu class="sidebar-menu" background-color="transparent" text-color="#fff" active-text-color="#409EFF"
+        :collapse="isCollapsed" @select="handleSelect">
+        <el-menu-item index="featured">
+          <el-icon>
+            <House />
+          </el-icon>
+          <span>精选网站</span>
         </el-menu-item>
-        <el-menu-item index="3" @click="scrollToHot('work')">
-          <el-icon><Tickets /></el-icon>
-          <template #title>资源~</template>
+        <el-menu-item index="tools">
+          <el-icon>
+            <Tools />
+          </el-icon>
+          <span>实用工具</span>
         </el-menu-item>
-        <el-menu-item index="4" @click="scrollToHot('ai')">
-          <el-icon><MagicStick /></el-icon>
-          <template #title>AI网站</template>
+        <el-menu-item index="ai">
+          <el-icon>
+            <Picture />
+          </el-icon>
+          <span>AI内容</span>
         </el-menu-item>
-        <el-menu-item index="5" @click="scrollToHot('tool')">
-          <el-icon><Box /></el-icon>
-          <template #title>工具箱</template>
+        <el-menu-item index="hax">
+          <el-icon>
+            <Monitor />
+          </el-icon>
+          <span>黑科技</span>
         </el-menu-item>
-        <el-menu-item index="6" @click="scrollToHot('tech')">
-          <el-icon><Cpu /></el-icon>
-          <template #title>黑科技</template>
+        <el-menu-item index="hot">
+          <el-icon>
+            <Document />
+          </el-icon>
+          <span>知名网站</span>
         </el-menu-item>
-        <el-menu-item index="7" @click="scrollToHot('other')">
-          <el-icon><MoreFilled /></el-icon>
-          <template #title>其它</template>
+        <el-menu-item index="other">
+          <el-icon>
+            <Document />
+          </el-icon>
+          <span>其它</span>
         </el-menu-item>
       </el-menu>
     </div>
-    <div class="body">
-      <br>
-      <div class="content">
-        <el-image :src=topImg class="top-img" fit="cover" @click="router().push({ path: '/apply_view' })"></el-image>
-        <br>
-        <div style="margin-bottom: 15px">
-          <el-icon color="var(--themeColor2)" size="25px"><HomeFilled /></el-icon> <span style="font-size: 20px">热门网站</span>
-        </div>
-        <br>
-        <div id="hot" class="news-content">
-          <div v-for="item in linkList" :key="item" class="news-item">
-              <div class="news-image" v-if="item.isHot ===1">
-                <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
-              </div>
-              <div class="news-description" v-if="item.isHot === 1">
-                <h2>{{ item.linkName }}</h2>
-                <p>{{ item.linkIntro}}</p>
-              </div>
-              <el-button
-                  v-if="item.isHot === 1"
-                  type="primary"
-                  @click="handle(item.linkUrl)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style="margin-top: 50px"
-                  color="var(--themeColor2)"
-              >
-                GO
-              </el-button>
-          </div>
-        </div>
-<!--收藏-->
-        <div style="margin-bottom: 15px">
-          <el-icon color="var(--themeColor2)" size="25px"><StarFilled /></el-icon> <span style="font-size: 20px">我的收藏</span>
-        </div>
-        <div id="stat" class="news-content">
-          <div v-for="item in userStatLink" :key="item" class="news-item">
-            <div class="news-image">
-              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
-            </div>
-            <div class="news-description">
-              <h2>{{ item.linkName }}</h2>
-              <p>{{ item.linkIntro}}</p>
-            </div>
-            <el-button
-                type="primary"
-                @click="handle(item.linkUrl)"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="margin-top: 50px"
-                color="var(--themeColor2)"
-            >
-              GO
-            </el-button>
-            <el-tooltip
-                class="box-item"
-                effect="dark"
-                content="取消收藏"
-                placement="top-start"
-            >
-              <el-icon v-if="userStatLink.includes(item)" color="var(--themeColor2)" @click="cancelLinkStat(item.linkId)"><StarFilled /></el-icon>
-            </el-tooltip>
-          </div>
+
+    <!-- 折叠按钮 -->
+    <div class="collapse-btn" @click="toggleSidebar">
+      <el-icon :size="20">
+        <Fold v-if="!isCollapsed" />
+        <Expand v-else />
+      </el-icon>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="main-content" :class="{ 'content-expanded': isCollapsed }">
+      <div class="content-wrapper">
+        <!-- 顶部导航栏 -->
+        <div class="img-container">
+          <el-image :src="topImg" class="top-img" fit="cover" @click="handleImageClick"></el-image>
         </div>
 
-        <div style="margin-bottom: 15px">
-          <el-icon color="var(--themeColor2)" size="25px"><Tickets /></el-icon> <span style="font-size: 20px">冲浪资源</span>
-        </div>
-        <div id="work" class="news-content">
-          <div v-for="item in linkList" :key="item" class="news-item">
-            <div class="news-image" v-if="item.linkSort === 'work'">
-              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
-            </div>
-            <div class="news-description" v-if="item.linkSort === 'work'">
-              <h2>{{ item.linkName }}</h2>
-              <p>{{ item.linkIntro}}</p>
-            </div>
-            <el-button
-                v-if="item.linkSort === 'work'"
-                type="primary"
-                @click="handle(item.linkUrl)"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="margin-top: 50px"
-                color="var(--themeColor2)"
-            >
-              GO
-            </el-button>
-            <el-tooltip
-                class="box-item"
-                effect="dark"
-                content="收藏"
-                placement="top-start"
-            >
-              <el-icon v-if="item.linkSort === 'work'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
-            </el-tooltip>
-          </div>
-        </div>
+        <!-- 内容区域 -->
+        <div class="content">
+          <h3 class="section-title" id="featured">精选网站</h3>
+          <el-row :gutter="20">
+            <template v-for="(item, index) in websites" :key="index">
+              <el-col v-if="item.isHot === 1" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+                <el-popover placement="top-start" :width="200" trigger="hover" :content="item.linkIntro">
+                  <template #reference>
+                    <el-card class="website-card" :body-style="{ padding: '0px' }" @click="goLink(item.linkUrl)">
+                      <div class="card-content">
+                        <el-image :src="imageUrl + item.linkImg" :alt="item.linkName" class="item-icon" />
+                        <div class="item-info">
+                          <h4>{{ item.linkName }}</h4>
+                          <p>{{ item.linkIntro }}</p>
+                        </div>
+                        <div class="favorite-icon" @click.stop="addLinkStat(item.linkId)">
+                          <el-icon>
+                            <Star />
+                          </el-icon>
+                        </div>
+                      </div>
+                    </el-card>
+                  </template>
+                </el-popover>
+              </el-col>
+            </template>
+          </el-row>
 
-        <div style="margin-bottom: 15px">
-          <el-icon color="var(--themeColor2)" size="25px"><MagicStick /></el-icon> <span style="font-size: 20px">Ai改变未来</span>
-        </div>
-        <div id="ai" class="news-content">
-          <div v-for="item in linkList" :key="item" class="news-item">
-            <div class="news-image" v-if="item.linkSort === 'ai'">
-              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
-            </div>
-            <div class="news-description" v-if="item.linkSort === 'ai'">
-              <h2>{{ item.linkName }}</h2>
-              <p>{{ item.linkIntro}}</p>
-            </div>
+          <h3 class="section-title" id="featured">我的收藏</h3>
+          <el-row :gutter="20">
+            <template v-for="(item, index) in userStatLink" :key="index">
+              <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+                <el-popover placement="top-start" :width="200" trigger="hover" :content="item.linkIntro">
+                  <template #reference>
+                    <el-card class="website-card" :body-style="{ padding: '0px' }" @click="goLink(item.linkUrl)">
+                      <div class="card-content">
+                        <el-image :src="imageUrl + item.linkImg" :alt="item.linkName" class="item-icon" />
+                        <div class="item-info">
+                          <h4>{{ item.linkName }}</h4>
+                          <p>{{ item.linkIntro }}</p>
+                        </div>
+                        <div class="favorite-icon" @click.stop="cancelLinkStat(item.linkId)">
+                          <el-icon>
+                            <Star />
+                          </el-icon>
+                        </div>
+                      </div>
+                    </el-card>
+                  </template>
+                </el-popover>
+              </el-col>
+            </template>
+          </el-row>
 
-            <el-button
-                v-if="item.linkSort === 'ai'"
-                type="primary"
-                @click="handle(item.linkUrl)"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="margin-top: 50px"
-                color="var(--themeColor2)"
-            >
-              GO
-            </el-button>
-            <el-tooltip
-                class="box-item"
-                effect="dark"
-                content="收藏"
-                placement="top-start"
-            >
-              <el-icon v-if="item.linkSort === 'ai'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
-            </el-tooltip>
-          </div>
-        </div>
+          <h3 class="section-title" id="tools">实用工具</h3>
+          <el-row :gutter="20">
+            <template v-for="(item, index) in websites" :key="index">
+              <el-col v-if="item.linkSort === 'tools'" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+                <el-popover placement="top-start" :width="200" trigger="hover" :content="item.linkIntro">
+                  <template #reference>
+                    <el-card class="website-card" :body-style="{ padding: '0px' }" @click="goLink(item.linkUrl)">
+                      <div class="card-content">
+                        <el-image :src="imageUrl + item.linkImg" :alt="item.linkName" class="item-icon" />
+                        <div class="item-info">
+                          <h4>{{ item.linkName }}</h4>
+                          <p>{{ item.linkIntro }}</p>
+                        </div>
+                        <div class="favorite-icon" @click.stop="addLinkStat(item.linkId)">
+                          <el-icon>
+                            <Star />
+                          </el-icon>
+                        </div>
+                      </div>
+                    </el-card>
+                  </template>
+                </el-popover>
+              </el-col>
+            </template>
+          </el-row>
 
-        <div style="margin-bottom: 15px">
-          <el-icon color="var(--themeColor2)" size="25px"><Box /></el-icon> <span style="font-size: 20px">工具箱</span>
-        </div>
-        <div id="tool" class="news-content">
-          <div v-for="item in linkList" :key="item" class="news-item">
-            <div class="news-image" v-if="item.linkSort === 'tool'">
-              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
-            </div>
-            <div class="news-description" v-if="item.linkSort === 'tool'">
-              <h2>{{ item.linkName }}</h2>
-              <p>{{ item.linkIntro}}</p>
-            </div>
-            <el-button
-                v-if="item.linkSort === 'tool'"
-                type="primary"
-                @click="handle(item.linkUrl)"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="margin-top: 50px"
-                color="var(--themeColor2)"
-            >
-              GO
-            </el-button>
-            <el-tooltip
-                class="box-item"
-                effect="dark"
-                content="收藏"
-                placement="top-start"
-            >
-              <el-icon v-if="item.linkSort === 'tool'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
-            </el-tooltip>
-          </div>
-        </div>
+          <h3 class="section-title" id="ai">AI内容</h3>
+          <el-row :gutter="20">
+            <template v-for="(item, index) in websites" :key="index">
+              <el-col v-if="item.linkSort === 'ai'" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+                <el-popover placement="top-start" :width="200" trigger="hover" :content="item.linkIntro">
+                  <template #reference>
+                    <el-card class="website-card" :body-style="{ padding: '0px' }" @click="goLink(item.linkUrl)">
+                      <div class="card-content">
+                        <el-image :src="imageUrl + item.linkImg" :alt="item.linkName" class="item-icon" />
+                        <div class="item-info">
+                          <h4>{{ item.linkName }}</h4>
+                          <p>{{ item.linkIntro }}</p>
+                        </div>
+                        <div class="favorite-icon" @click.stop="addLinkStat(item.linkId)">
+                          <el-icon>
+                            <Star />
+                          </el-icon>
+                        </div>
+                      </div>
+                    </el-card>
+                  </template>
+                </el-popover>
+              </el-col>
+            </template>
+          </el-row>
 
-        <div style="margin-bottom: 15px">
-          <el-icon color="var(--themeColor2)" size="25px"><Cpu /></el-icon> <span style="font-size: 20px">黑科技</span>
-        </div>
-        <div id="tech" class="news-content">
-          <div v-for="item in linkList" :key="item" class="news-item">
-            <div class="news-image" v-if="item.linkSort === 'tech'">
-              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
-            </div>
-            <div class="news-description" v-if="item.linkSort === 'tech'">
-              <h2>{{ item.linkName }}</h2>
-              <p>{{ item.linkIntro}}</p>
-            </div>
-            <el-button
-                v-if="item.linkSort === 'tech'"
-                type="primary"
-                @click="handle(item.linkUrl)"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="margin-top: 50px"
-                color="var(--themeColor2)"
-            >
-              GO
-            </el-button>
-            <el-tooltip
-                class="box-item"
-                effect="dark"
-                content="收藏"
-                placement="top-start"
-            >
-              <el-icon v-if="item.linkSort === 'tech'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
-            </el-tooltip>
-          </div>
-        </div>
+          <h3 class="section-title" id="hax">黑科技</h3>
+          <el-row :gutter="20">
+            <template v-for="(item, index) in websites" :key="index">
+              <el-col v-if="item.linkSort === 'hax'" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+                <el-popover placement="top-start" :width="200" trigger="hover" :content="item.linkIntro">
+                  <template #reference>
+                    <el-card class="website-card" :body-style="{ padding: '0px' }" @click="goLink(item.linkUrl)">
+                      <div class="card-content">
+                        <el-image :src="imageUrl + item.linkImg" :alt="item.linkName" class="item-icon" />
+                        <div class="item-info">
+                          <h4>{{ item.linkName }}</h4>
+                          <p>{{ item.linkIntro }}</p>
+                        </div>
+                        <div class="favorite-icon" @click.stop="addLinkStat(item.linkId)">
+                          <el-icon>
+                            <Star />
+                          </el-icon>
+                        </div>
+                      </div>
+                    </el-card>
+                  </template>
+                </el-popover>
+              </el-col>
+            </template>
+          </el-row>
 
-        <div style="margin-bottom: 15px">
-          <el-icon color="var(--themeColor2)" size="25px"><MoreFilled /></el-icon> <span style="font-size: 20px">其它</span>
-        </div>
-        <div id="other" class="news-content">
-          <div v-for="item in linkList" :key="item" class="news-item">
-            <div class="news-image" v-if="item.linkSort === 'other'">
-              <el-image :src="imageUrl+item.linkImg" fit="contain" style="width: 200px"></el-image>
-            </div>
-            <div class="news-description" v-if="item.linkSort === 'other'">
-              <h2>{{ item.linkName }}</h2>
-              <p>{{ item.linkIntro}}</p>
-            </div>
-            <el-button
-                v-if="item.linkSort === 'other'"
-                type="primary"
-                @click="handle(item.linkUrl)"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="margin-top: 50px"
-                color="var(--themeColor2)"
-            >
-              GO
-            </el-button>
-            <el-tooltip
-                class="box-item"
-                effect="dark"
-                content="收藏"
-                placement="top-start"
-            >
-              <el-icon v-if="item.linkSort === 'other'" @click="addLinkStat(item.linkId)"><StarFilled /></el-icon>
-            </el-tooltip>
-          </div>
+          <h3 class="section-title" id="hot">知名网站</h3>
+          <el-row :gutter="20">
+            <template v-for="(item, index) in websites" :key="index">
+              <el-col v-if="item.linkSort === 'hot'" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+                <el-popover placement="top-start" :width="200" trigger="hover" :content="item.linkIntro">
+                  <template #reference>
+                    <el-card class="website-card" :body-style="{ padding: '0px' }" @click="goLink(item.linkUrl)">
+                      <div class="card-content">
+                        <el-image :src="imageUrl + item.linkImg" :alt="item.linkName" class="item-icon" />
+                        <div class="item-info">
+                          <h4>{{ item.linkName }}</h4>
+                          <p>{{ item.linkIntro }}</p>
+                        </div>
+                        <div class="favorite-icon" @click.stop="addLinkStat(item.linkId)">
+                          <el-icon>
+                            <Star />
+                          </el-icon>
+                        </div>
+                      </div>
+                    </el-card>
+                  </template>
+                </el-popover>
+              </el-col>
+            </template>
+          </el-row>
+
+          <h3 class="section-title" id="other">其它</h3>
+          <el-row :gutter="20">
+            <template v-for="(item, index) in websites" :key="index">
+              <el-col v-if="item.linkSort === 'other'" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+                <el-popover placement="top-start" :width="200" trigger="hover" :content="item.linkIntro">
+                  <template #reference>
+                    <el-card class="website-card" :body-style="{ padding: '0px' }" @click="goLink(item.linkUrl)">
+                      <div class="card-content">
+                        <el-image :src="imageUrl + item.linkImg" :alt="item.linkName" class="item-icon" />
+                        <div class="item-info">
+                          <h4>{{ item.linkName }}</h4>
+                          <p>{{ item.linkIntro }}</p>
+                        </div>
+                        <div class="favorite-icon" @click.stop="addLinkStat(item.linkId)">
+                          <el-icon>
+                            <Star />
+                          </el-icon>
+                        </div>
+                      </div>
+                    </el-card>
+                  </template>
+                </el-popover>
+              </el-col>
+            </template>
+          </el-row>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-  import store from "@/store";
-  import {onMounted, ref} from "vue";
-  import {addLinkStatById, cancelLinkStatById, getLinkList, getTopImgUrl, selectStatLink} from "../../api/BSideApi";
-  import {conversionTime} from "@/utils/date";
-  import router from "@/router";
-  import {Cpu, StarFilled, Tickets} from "@element-plus/icons-vue";
-  import {ElNotification} from "element-plus";
-
-  export default {
-    name: "LinkView",
-    components: {Cpu, Tickets, StarFilled},
-    methods: {
-      router() {
-        return router
-      },
-    },
-    computed: {
-      store() {
-        return store;
-      },
-    },
-    mounted() {
-      // const hash = this.$route.hash;
-      // if (hash) {
-      //   const targetElement = document.getElementById(hash.substring(1));
-      //   if (targetElement) {
-      //     targetElement.scrollIntoView();
-      //   }
-      // }
-    },
-    setup(){
-      const dataTables = ref([]);
-      const current = ref(1);
-      const total = ref(0);
-      let load = ref(true);
-      let empty = ref(false);
-      let error = ref(false);
-      const topImg = ref('')
-
-      function handle(url){
-        window.open(url,'_blank');
-      }
-
-      const linkList = ref([])
-
-      function scrollToHot(sort) {
-        let hotElement = document.getElementById(sort);
-        if (hotElement) {
-          hotElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-        }
-      }
-      const isCollapse = ref(true)
-
-      const count = ref(0)
-      const load2 = () => {
-        count.value += 2
-      }
-
-      async function getTopImg() {
-        topImg.value = await getTopImgUrl();
-      }
-
-      async function LinkList() {
-        linkList.value = await getLinkList();
-        linkList.value = linkList.value.filter(item => item.isPublic !== 0);
-
-      }
-
-      const imageUrl= ref('');
-
-      onMounted( () =>{
-        imageUrl.value = process.env.VUE_APP_IMAGE;
-        getTopImg();
-        LinkList();
-        getUserStatLink();
-      })
-
-      const userStatLink = ref([]);
-
-      async function addLinkStat(id) {
-        const v = await addLinkStatById(id)
-        if (!v) {
-          ElNotification({
-            title: "收藏成功",
-            message: '可以刷新页面查看最新',
-            type: "success",
-          });
-        }
-      }
-
-      async function cancelLinkStat(id) {
-        const v = await cancelLinkStatById(id);
-        if (!v) {
-          ElNotification({
-            title: "取消收藏成功",
-            message: '可以刷新页面查看最新',
-            type: "success",
-          });
-        }
-      }
-
-      async function getUserStatLink() {
-        userStatLink.value = await selectStatLink();
-        console.log(userStatLink)
-      }
-
-      async function handleCurrentChange(pageNum) {
-        try {
-          let res = await getLinkList(pageNum);
-          let records = res.records;
-          if (records.length   > 0) {
-            for (const r of records) {
-              r.createdTime = conversionTime(r.createdTime);
-            }
-            dataTables.value = records;
-          } else {
-            empty.value = true;
-          }
-          current.value = res.current;
-          total.value = res.total;
-          load.value = false;
-          error.value = false;
-        } catch (e) {
-          load.value = false;
-          error.value = true;
-        }
-      }
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import { addLinkStatById, cancelLinkStatById, getLinkList, getTopImgUrl, selectStatLink } from "../../api/BSideApi";
+import { Search, House, Tools, Picture, Monitor, Document, Fold, Expand, Star } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+import {ElNotification} from "element-plus";
 
 
+const isCollapsed = ref(false)
+const isMobile = ref(false)
+const imageUrl = ref('')
 
-      return{
-        topImg,
-        linkList,
-        getTopImg,
-        handleCurrentChange,
-        dataTables,
-        current,
-        total,
-        load,
-        empty,
-        error,
-        LinkList,
-        count,
-        load2,
-        isCollapse,
-        handle,
-        scrollToHot,
-        imageUrl,
-        userStatLink,
-        addLinkStat,
-        cancelLinkStat,
-      }
-    }
+const router = useRouter()
+
+// 切换侧边栏
+const toggleSidebar = () => {
+  isCollapsed.value = !isCollapsed.value
+}
+
+const topImg = ref('')
+async function getTopImg() {
+  topImg.value = await getTopImgUrl();
+}
+
+// 检查是否为移动设备
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+  isCollapsed.value = isMobile.value
+}
+
+async function addLinkStat(id) {
+  const v = await addLinkStatById(id)
+  if (!v) {
+    ElNotification({
+      title: "收藏成功",
+      message: '可以刷新页面查看最新',
+      type: "success",
+    });
   }
+}
+
+// 监听窗口大小变化
+onMounted(async () => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+  imageUrl.value = process.env.VUE_APP_IMAGE;
+  await LinkList()
+  await getTopImg();
+  await getUserStatLink();
+})
+
+async function LinkList() {
+  websites.value = await getLinkList();
+  websites.value = websites.value.filter(item => item.isPublic !== 0);
+  console.log(websites.value)
+}
+function goLink(url) {
+  window.open(url, '_blank')
+}
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
+
+const websites = ref([]);
+
+// 添加处理菜单选择的方法
+const handleSelect = (index) => {
+  const element = document.getElementById(index);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+async function cancelLinkStat(id) {
+  const v = await cancelLinkStatById(id);
+  if (!v) {
+    ElNotification({
+      title: "取消收藏成功",
+      message: '可以刷新页面查看最新',
+      type: "success",
+    });
+  }
+}
+const userStatLink = ref([]);
+
+async function getUserStatLink() {
+  userStatLink.value = await selectStatLink();
+  console.log(userStatLink)
+}
+
+// 添加图片点击处理函数
+const handleImageClick = () => {
+  router.push('/apply_view')
+}
 </script>
 
-<style lang="scss" scoped>
-
-.app {
+<style scoped>
+.page-container {
   display: flex;
-  height: 100%;
-  width: 100%;
-  background-color: var(--bgColor2);
+  min-height: 100vh;
+  position: relative;
 }
 
-.nav {
+.sidebar {
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 20px 0;
+  transition: all 0.3s ease;
+  position: fixed;
+  height: 100vh;
+  z-index: 1000;
+}
+
+.sidebar-collapsed {
+  width: 64px;
+  padding: 20px 0;
+}
+
+.sidebar-collapsed .logo {
+  padding: 0 12px;
+}
+
+.main-content {
   flex: 1;
-  max-width: 65px;
-  height: 100%;
+  padding: 30px;
+  margin-left: 200px;
+  transition: all 0.3s ease;
+  height: 100vh;
+  overflow-y: auto;
 }
 
-.body {
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  flex-direction: column;
-  align-items: center;
+.content-expanded {
+  margin-left: 64px;
+}
+
+.collapse-btn {
+  position: fixed;
+  left: 200px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+  width: 24px;
+  height: 50px;
   display: flex;
-  overflow: auto;
-  background: linear-gradient(to bottom right, var(--bgColor1), var(--bgColor2),var(--bgColor3));
-  background-size: 200% 200%;
-  animation: gradient 8s ease infinite;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+  transition: all 0.3s ease;
+  z-index: 1000;
 }
 
-@keyframes gradient {
-  0% {
-    background-position: 0 12%;
+.sidebar-collapsed+.collapse-btn {
+  left: 64px;
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
   }
 
-  50% {
-    background-position: 100% 100%;
+  .sidebar-collapsed {
+    transform: translateX(0);
   }
 
-  100% {
-    background-position: 0 12%;
+  .main-content {
+    margin-left: 0;
+  }
+
+  .content-expanded {
+    margin-left: 0;
+  }
+
+  .collapse-btn {
+    left: 0;
+  }
+
+  .sidebar-collapsed+.collapse-btn {
+    left: 64px;
   }
 }
 
-.content{
+.logo {
+  padding: 0 20px;
   margin-bottom: 20px;
 }
 
-.top-img{
-  width: 100%;
-  height: 250px;
-  border-radius: 10px;
+.logo-img {
+  max-width: 100%;
+  height: auto;
 }
 
-.news-content{
+.sidebar-menu {
+  border-right: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.nav-bar {
+  margin-bottom: 30px;
+}
+
+.search-input {
+  margin-bottom: 20px;
+}
+
+:deep(.el-input__wrapper) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+:deep(.el-input__inner) {
+  color: white;
+}
+
+.menu-bar {
+  border: none !important;
+}
+
+:deep(.el-menu--horizontal) {
+  border-bottom: none;
+}
+
+:deep(.el-menu-item) {
+  border-radius: 20px;
+}
+
+:deep(.el-menu-item.is-active) {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.section-title {
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.website-card {
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+  background-color: var(--bgColor2);
+}
+
+.website-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-content {
+  padding: 15px;
   display: flex;
-  flex-direction: column;
-  width: 100%;
+  align-items: center;
+  position: relative;
 }
 
-.news-item {
-  display: flex;
-  width: 100%;
-  margin-bottom: 15px;
-
+.item-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
-.news-image {
+.item-info {
   flex: 1;
+  min-width: 0;
 }
 
-.news-description {
-  flex: 2;
-  padding: 0 20px;
-}
-
-
-
-h2 {
-  margin-bottom: 10px;
-  font-size: 1.5rem;
-}
-
-p {
+.item-info h4 {
+  margin: 0;
+  font-size: 16px;
   color: var(--textColor2);
 }
 
-.circle-breath {
-  background: pink;
-  box-shadow: 0 0 0 0 rgb(204, 73, 152);
-  height: 36px;
-  width: 36px;
-  border-radius: 80%;
-  animation: donghua 2.4s infinite;
+.item-info p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #909399;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
-@keyframes donghua {
-  0% {
-    transform: scale(0.60);
-    /* 注意rgba中的a的设置 */
-    box-shadow: 0 0 0 0 rgba(204, 73, 152, 60%);
-  }
+.favorite-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  cursor: pointer;
+  color: #ffd700;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  60% {
-    transform: scale(1);
-    box-shadow: 0 0 0 36px rgba(204, 73, 152, 0%);
-  }
+.favorite-icon:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
 
-  100% {
-    transform: scale(0.60);
-    box-shadow: 0 0 0 0 rgba(204, 73, 152, 0%);
+.website-card:hover .favorite-icon {
+  opacity: 1;
+}
+
+.content {
+  padding-bottom: 150px;
+}
+
+.img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.top-img {
+  width: 100%;
+  height: 250px;
+  border-radius: 10px;
+  max-width: 700px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.top-img:hover {
+  transform: scale(1.02);
+}
+
+.content-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px 50px;
+}
+
+/* 响应式布局调整 */
+@media screen and (max-width: 1600px) {
+  .content-wrapper {
+    max-width: 1200px;
   }
 }
 
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
+@media screen and (max-width: 1200px) {
+  .content-wrapper {
+    max-width: 1000px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .content-wrapper {
+    max-width: 100%;
+    padding: 0 10px;
+  }
 }
 </style>

@@ -22,7 +22,7 @@
     >
       <el-table-column prop="userId" label="标识" />
       <el-table-column prop="userName" label="昵称" />
-      <el-table-column prop="frequency" label="Ai币" />
+      <el-table-column prop="frequency" label="IT币" />
       <el-table-column prop="email" label="邮箱" />
       <el-table-column prop="lastOperationTime" label="最后操作时间" />
       <el-table-column prop="createdTime" label="创建时间" />
@@ -74,7 +74,7 @@
       </el-form-item>
     </el-form>
     <el-form>
-      <el-form-item label="Ai币" label-width="100px">
+      <el-form-item label="IT币" label-width="100px">
         <el-input
           autocomplete="off"
           style="width: 120px"
@@ -138,7 +138,7 @@ export default {
       if (!form.value.frequency) {
         ElNotification({
           title: "错误",
-          message: "Ai币格式不正确",
+          message: "IT币格式不正确",
           type: "error",
         });
         return;

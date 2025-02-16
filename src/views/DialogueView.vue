@@ -12,13 +12,13 @@
         </div>
       </div>
 
-      <img class="logo" alt="Vue logo" src="../assets/passlogo.png"/>
+      <img class="logo" alt="Vue logo" src="../assets/logo.png"/>
       <div class="expositoryCase">欢迎使用-Pass Assistant</div>
       <div class="consume">
         <el-icon>
           <Goods/>
         </el-icon>
-        <div class="consumeText">每次提问消耗1个SUPER币</div>
+        <div class="consumeText">每次提问消耗1个IT币</div>
       </div>
       <div class="beCareful">请注意不支持违法、违规等不当信息内容</div>
     </div>
@@ -57,7 +57,7 @@
               class="flexShrink"
               :size="35"
               :icon="UserFilled"
-              :src="require('../assets/passlogo.png')"
+              :src="require('../assets/logo.png')"
           />
           <template v-if="item.assistant">
             <div style="width: 100%">
@@ -220,7 +220,7 @@
 </template>
 
 <script>
-import {h, nextTick, onMounted, ref} from "vue";
+import {h, nextTick, onBeforeUnmount, onMounted, ref} from "vue";
 import {
   ChatDotRound,
   ChatLineSquare,
@@ -285,15 +285,13 @@ export default {
     const rate = ref(50);
     const memory = ref(10);
     const size = ref(1000);
-    const open = () => {
-      ElNotification({
-        title: "网站提示",
-        message: h('i', { style: 'color: #8166e7' }, '该网站适配于PC端，手机端浏览该网站可能会影响体验，建议使用电脑或平板~'),
-      })
-    }
+    onBeforeUnmount(()=>{
+      const element = document.getElementById('my-element');
+      if (element) {
+        element.removeEventListener('resize', handleResize);
+      }
+    })
     onMounted(() => {
-      window.addEventListener("resize", handleResize);
-      open();
       handleResize();
       if (store.getters.userinfo) getUser();
       //获取图片域名
@@ -328,6 +326,7 @@ export default {
           );
         }
       }
+      window.addEventListener("resize", handleResize);
     });
 
     //提交内容的快捷键监听

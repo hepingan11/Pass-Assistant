@@ -1660,4 +1660,10 @@ export default {
   justify-content: right;
   margin-right: 5px;
 }
+
+.animation-dot {
+  display: flex;
+  padding-right: 5px;
+  margin: 35px 12px 0 0;
+}
 </style>

@@ -22,7 +22,17 @@ const TerserPlugin = require('terser-webpack-plugin');
 //         cssSourceMap: false
 //     }
 // })
+
 module.exports = defineConfig({
+
+    devServer: {
+        proxy:{
+            '/api':{
+                target:'http://127.0.0.1:5000',//产生跨域的地址
+                changeOrigin:true
+            }
+        }
+    },
     publicPath: process.env.NODE_ENV === "production" ? "./" : "/",
     transpileDependencies: true,
     lintOnSave: false,

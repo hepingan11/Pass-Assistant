@@ -36,6 +36,10 @@ import {ElNotification} from "element-plus";
     setup(){
       const num = ref(1000)
       onMounted(async () => {
+        ElNotification({
+          title: "该模块为我学校的模块，不是本校的可以无视ฅ۶•ﻌ•♡",
+          type: "info",
+        });
         await GetPassNews();
         num.value = await getAllNum()*10;
       })
