@@ -134,18 +134,6 @@ const routes = [{
         }
     },
     {
-        path: "/digital_view",
-        name: "DigitalView",
-        component: () => import('../views/DigitalView.vue'),
-        meta: {
-            title: '数字人平台',
-            isHeadNavigation: true,
-            keepAlive: true,
-            isLeftMenu: true
-        }
-    },
-
-    {
         path: "/preset_character",
         name: "PresetCharacter",
         component: () => import('../views/PresetCharacterView.vue'),
@@ -212,55 +200,11 @@ const routes = [{
         }
     },
     {
-        path: '/data_view',
-        name: 'DataView',
-        component: () => import('@/views/DataView.vue'),
-        meta: {
-            title: '数据分析室',
-            isHeadNavigation: true,
-            keepAlive: true,
-            isLeftMenu: true
-        }
-    },
-    {
-        path: '/aigc_view',
-        name: 'AigcView',
-        component: () => import('@/views/AigcView.vue'),
-        meta: {
-            title: 'AIGC新闻',
-            isHeadNavigation: true,
-            keepAlive: true,
-            isLeftMenu: false
-        }
-    },
-    {
         path: '/passnews_view',
         name: 'PassnewsView',
         component: () => import('@/views/PassnewsView.vue'),
         meta: {
             title: '派斯新闻',
-            isHeadNavigation: true,
-            keepAlive: true,
-            isLeftMenu: false
-        }
-    },
-    {
-        path: '/data_test_view',
-        name: 'DataTestView',
-        component: () => import('@/views/Data/DataTestView.vue'),
-        meta: {
-            title: '京东数据',
-            isHeadNavigation: true,
-            keepAlive: true,
-            isLeftMenu: false
-        }
-    },
-    {
-        path: '/data_flourish_view',
-        name: 'DataFlourishView',
-        component: () => import('@/views/Data/DataFlourishView.vue'),
-        meta: {
-            title: 'Flourish数据',
             isHeadNavigation: true,
             keepAlive: true,
             isLeftMenu: false
@@ -283,6 +227,83 @@ const routes = [{
         component: () => import('@/views/FunnyView.vue'),
         meta: {
             title: '视觉盛宴',
+            isHeadNavigation: true,
+            keepAlive: false,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/zhipu',
+        name: 'ZhipuView',
+        component: () => import('@/views/ZhipuView.vue'),
+        meta: {
+            title: '智谱Ai',
+            isHeadNavigation: true,
+            keepAlive: false,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/zhipuvideo',
+        name: 'ZhipuVideoView',
+        component: () => import('@/views/ZhipuVideoView.vue'),
+        meta: {
+            title: '视频生成',
+            isHeadNavigation: true,
+            keepAlive: false,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/mydata',
+        name: 'MyDataView',
+        component: () => import('@/views/MyDataView.vue'),
+        meta: {
+            title: '我的数据',
+            isHeadNavigation: true,
+            keepAlive: false,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/loading',
+        name: 'Loading',
+        component: () => import('@/components/Loading.vue'),
+        meta: {
+            title: '加载中...',
+            isHeadNavigation: true,
+            keepAlive: false,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/about',
+        name: 'About',
+        component: () => import('@/views/AboutView.vue'),
+        meta: {
+            title: '关于我',
+            isHeadNavigation: true,
+            keepAlive: false,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/code',
+        name: 'Code',
+        component: () => import('@/views/CodeView.vue'),
+        meta: {
+            title: '源码市场',
+            isHeadNavigation: true,
+            keepAlive: false,
+            isLeftMenu: false
+        }
+    },
+    {
+        path: '/pay_success',
+        name: 'PaySuccess',
+        component: () => import('@/views/PaySuccess.vue'),
+        meta: {
+            title: '支付成功',
             isHeadNavigation: true,
             keepAlive: false,
             isLeftMenu: false

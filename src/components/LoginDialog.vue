@@ -112,6 +112,9 @@
                 <div style="padding-left: 10px" @click="passwordDialog">
                   找回密码
                 </div>
+                <div style="padding-left: 10px" @click="toWebContent">
+                  登录将默认同意网站内容
+                </div>
               </div>
             </el-form-item>
             <el-form-item prop="code" v-show="isLogin === false">
@@ -150,7 +153,7 @@
                 @click="isLogin = !isLogin"
                 v-if="!isLogin"
               >
-                前往登录
+                <h2>前往登录</h2>
               </div>
             </el-form-item>
             <el-form-item>
@@ -196,7 +199,7 @@
         </div>
         <div style="padding: 20px 40px 30px">
           <div class="login-title">
-            <div class="login-selected">TIME SEA PLUS</div>
+            <div class="login-selected">Pass Assistant</div>
           </div>
           <el-form @keyup.enter="retrievePassword" ref="formRef" size="large">
             <el-form-item prop="username">
@@ -283,6 +286,45 @@
         </div>
       </div>
     </el-dialog>
+    <el-dialog
+        v-model="isReadWebContent"
+        width="420px"
+        class="login-dialog"
+        :show-close="false"
+        align-center
+        @close="close"
+        style="border-radius: 10px; overflow-x: hidden"
+    >
+      <div class="login-box">
+        <div
+            style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 40px;
+          "
+        >
+          <img
+              src="../assets/logoHead.svg"
+              style="width: 60px; height: 60px"
+              alt=""
+          />
+        </div>
+        <div style="padding: 20px 40px 30px">
+          <div class="login-title">
+            <div class="login-selected">Pass Assistant</div>
+          </div>
+          尊敬的用户，欢迎访问我们的AI文本对话网站。为了保护您的个人信息安全，我们特制定以下隐私政策：
+          <br>
+          本网站承诺尊重并保护您的隐私，不会收集与您身份无关的信息。<br>
+          在您使用本网站服务过程中，我们可能会收集您的浏览器类型、IP地址、访问时间等信息，用于优化网站体验。<br>
+          我们不会将您的个人信息透露给任何第三方，除非法律法规另有规定。<br>
+          我们将采取必要措施，确保您的信息安全，防止未经授权的访问、泄露、篡改等风险。<br>
+          请您仔细阅读本隐私政策，如您同意，请继续使用我们的服务。如有疑问，请联系我们。感谢您的信任与支持！<br>
+          ----2024.12.10 何平安<br>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -301,7 +343,6 @@ import {
   RetrieveEmailPassword,
 } from "../../api/BSideApi";
 import { ElMessage, ElNotification } from "element-plus";
-import store from "@/store";
 import { Connection, Platform, UserFilled } from "@element-plus/icons-vue";
 
 export default defineComponent({
@@ -324,6 +365,7 @@ export default defineComponent({
     let loginLoading = ref(false);
     let dialogVisible = ref(false);
     const isPassword = ref(false);
+    const isReadWebContent = ref(false);
     let isLogin = ref(true);
     // eslint-disable-next-line no-unused-vars
     let verifyCode = ref("");
@@ -605,7 +647,13 @@ export default defineComponent({
       }
     }
 
+    function toWebContent(){
+      dialogVisible.value = false;
+      isReadWebContent.value = true;
+    }
+
     return {
+      toWebContent,
       backLoginPanel,
       retrievePassword,
       passwordDialog,
@@ -629,6 +677,7 @@ export default defineComponent({
       emailForm,
       disabled,
       store,
+      isReadWebContent,
     };
   },
 });

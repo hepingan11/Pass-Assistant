@@ -23,6 +23,34 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="是否开启对话存储" label-width="200px">
+          <el-select
+              v-model="form.dialogueStorage"
+              placeholder="Select"
+              style="width: 200px"
+          >
+            <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="对话存储系统" label-width="200px">
+          <el-select
+              v-model="form.isHadoop"
+              placeholder="Select"
+              style="width: 200px"
+          >
+            <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="智能GPT对话请求链" label-width="200px">
           <el-input
             placeholder="请设置GPT请求链"
@@ -133,6 +161,7 @@ export default {
   setup() {
     const form = ref({
       sdButton: "",
+      dialogueStorage: "",
       sdUrl: "",
       openAiUrl: "",
       openAiPlusUrl: "",
@@ -146,6 +175,7 @@ export default {
       gptFrequency: undefined,
       gptTextImageFrequency: undefined,
       linkTopImg: "",
+      isHadoop: "",
     });
 
     const options = ref([
@@ -156,6 +186,17 @@ export default {
       {
         value: '0',
         label: '关'
+      }
+    ])
+
+    const options2 = ref([
+      {
+        value: 'hadoop',
+        label: 'Hadoop存储'
+      },
+      {
+        value: 'mysql',
+        label: 'Mysql'
       }
     ])
     onMounted(() => {
@@ -211,7 +252,8 @@ export default {
     return {
       onSubmit,
       form,
-      options
+      options,
+      options2
     };
   },
 };

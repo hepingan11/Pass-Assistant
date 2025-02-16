@@ -24,7 +24,7 @@
     >
       <el-table-column prop="exchangeId" label="标识" />
       <el-table-column prop="exchangeCode" label="兑换码" />
-      <el-table-column prop="frequency" label="所含Ai币" />
+      <el-table-column prop="frequency" label="所含IT币" />
       <el-table-column prop="createdTime" label="创建时间" />
       <el-table-column fixed="right" label="操作" width="200">
         <template #header>
@@ -73,7 +73,7 @@
       </el-form-item>
     </el-form>
     <el-form>
-      <el-form-item label="所含Ai币" label-width="100px">
+      <el-form-item label="所含IT币" label-width="100px">
         <el-input
           autocomplete="off"
           style="width: 120px"
@@ -147,7 +147,7 @@ export default {
       if (!buildFrequency) {
         ElNotification({
           title: "错误",
-          message: "所含Ai币不能为空",
+          message: "所含IT币不能为空",
           type: "error",
         });
         return;

@@ -54,7 +54,7 @@
         >
           <el-table-column prop="ordersId" label="订单号" />
           <el-table-column prop="productName" label="商品名称" />
-          <el-table-column prop="frequency" label="获赠Ai币" />
+          <el-table-column prop="frequency" label="获赠IT币" />
           <el-table-column prop="productPrice" label="价格" />
           <el-table-column prop="payTime" label="支付时间" />
           <el-table-column prop="state" label="支付状态" />
@@ -126,7 +126,7 @@ export default {
             if (r.state === 1) {
               r.state = "已完成";
               let payTime = r.payTime;
-              r.payTime = conversionTime(payTime);
+              r.payTime = payTime.replace('T', ' ');
             }
             if (r.state === 2) {
               r.state = "已取消";

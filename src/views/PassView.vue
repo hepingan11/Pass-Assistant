@@ -1,12 +1,11 @@
 <template>
-  <div class="target1" v-if="iframeLoaded"></div>
-  <div class="target2" v-if="iframeLoaded"></div>
-  <div class="target3" v-if="iframeLoaded"></div>
-  <div class="target4" v-if="iframeLoaded"></div>
-  <iframe id="iframe1" frameborder="false" src="https://my.spline.design/particles-09c66dceb707e50fcd2c245d149afdc6/" style="height: 100%;width: 100%"></iframe>
-<!--  <div v-if="iframeLoaded" class="loading">-->
-<!--    正在加载3D立绘中...可直接点击按钮进入主页面-->
-<!--  </div>-->
+<!--  <div class="target1" v-if="iframeLoaded"></div>-->
+<!--  <div class="target2" v-if="iframeLoaded"></div>-->
+<!--  <div class="target3" v-if="iframeLoaded"></div>-->
+<!--  <div class="target4" v-if="iframeLoaded"></div>-->
+  <iframe id="iframe1" frameborder="false" src="https://my.spline.design/particles-e6fc86dd354fba802798b80c4b639ee1/" style="height: 100%;width: 100%"></iframe>
+  <!-- <iframe id="iframe2" frameborder="false" src="https://my.spline.design/particles-09c66dceb707e50fcd2c245d149afdc6/" style="height: 100%;width: 100%"></iframe> -->
+  <Loading ref="loading"></Loading>/
   <div class="container" @click="router().push({ path: '/app' })" v-if="!iframeLoaded" >
     <a data-animation="ripple">开启 <span style="font-weight: bold;">AI之旅</span></a>
   </div>
@@ -14,42 +13,34 @@
 
 <script>
   import router from "@/router";
-  import store from "@/store";
-  import {h, onMounted, ref} from "vue";
+  import {h, ref} from "vue";
   import {ElNotification} from "element-plus";
+  import Loading from "@/App.vue";
   export default {
-
     name: `PassView`,
+    components: {Loading},
     methods: {
       router() {
         return router
       },
+
+
     },
-    computed: {
-      store() {
-        return store
-      }
+    mounted() {
+
     },
     setup() {
-      const open1 = () => {
-        ElNotification({
-          title: 'AI绘画2.0已上新',
-          message: h('i', { style: 'color: grey' }, '支持在线绘画且上传和浏览绘画作品了，快来试试吧~'),
-        })
-      }
-
       setTimeout(() => {
         handleLoad();
-        open1();
       }, 1700);
 
 
-      onMounted( ()=>{
-      })
+
       const iframeLoaded = ref(true);
       function handleLoad() {
         iframeLoaded.value = false;
       }
+
 
       return {
         iframeLoaded,

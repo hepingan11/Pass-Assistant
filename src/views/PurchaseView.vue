@@ -3,12 +3,11 @@
     <div class="body" v-if="mainPageVisible">
       <div class="article" v-if="store.getters.userinfo">我要赞助站点运行</div>
       <div class="introduce" v-if="store.getters.userinfo">
-        赞赏作者也可获得相应SUPER币
+        赞赏作者也可获得相应IT币
       </div>
       <div class="surplus" v-if="store.getters.userinfo">
-        剩余SUPER币 {{ store.getters.userinfo.frequency }}
+        剩余IT币 {{ store.getters.userinfo.frequency }}
       </div>
-      <el-tag color="var(--themeColor1)" class="aiwarning">现在暂不支持RMB购买Ai币，缺币的联系站长qq1973016127</el-tag>
       <ViewState
         class="state"
         v-if="!store.getters.userinfo"
@@ -52,7 +51,7 @@
               @click="payChoose(item.productId, item.frequency)"
             >
               <div class="wrapper-title">{{ item.productName }}</div>
-              <div class="quantity">{{ item.frequency }} Ai币</div>
+              <div class="quantity">{{ item.frequency }} IT币</div>
               <div class="quantity" style="font-size: 15px; padding-top: 10px">
                 ￥{{ item.productPrice }}
               </div>
@@ -81,7 +80,7 @@
         style="background-color: var(--bgColor1)"
       >
         <div class="pay-title">
-          选择支付方式后点击“跳转至收银台”打开支付页面支付
+          选择支付方式后点击"跳转至收银台"打开支付页面支付
         </div>
         <div style="text-align: center">
           <el-radio label="0" v-model="payType">
@@ -120,12 +119,43 @@
       @loginSucceeded="init"
     />
     <!--        支付宝支付-->
-    <cash-register
-      v-if="!mainPageVisible"
-      :outcome="outcome"
-      :showCover="showCover"
-      :showSucceed="showSucceed"
-    />
+    <div v-if="payying" class="payment-status-container">
+      <div class="status-content">
+        <div class="icon-wrapper warning">
+          <el-icon><WarningFilled /></el-icon>
+        </div>
+        <h1>请在新页面完成支付</h1>
+        <div class="warning-box">
+          <el-icon><InfoFilled /></el-icon>
+          <span>支付完成前请勿关闭或刷新当前页面</span>
+        </div>
+        <div class="status-info">
+          <p>支付完成后将自动检测支付状态</p>
+          <div class="loading-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="showSucceed" class="payment-status-container">
+      <div class="status-content success">
+        <div class="icon-wrapper success">
+          <el-icon><CircleCheckFilled /></el-icon>
+        </div>
+        <h1>支付成功</h1>
+        <p class="success-text">感谢您的支持！</p>
+        <el-button 
+          type="primary" 
+          class="view-button"
+          @click="router().push('/user_view')"
+        >
+          <el-icon><View /></el-icon>
+          <span>查看详情</span>
+        </el-button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -137,8 +167,8 @@ import {
   GetUserInfo,
 } from "../../api/BSideApi";
 import { ElLoading, ElNotification } from "element-plus";
-import CashRegister from "@/components/CashRegister.vue";
-import { CircleCheckFilled } from "@element-plus/icons-vue";
+
+import { CircleCheckFilled, WarningFilled, InfoFilled, View } from "@element-plus/icons-vue";
 import { useStore } from "vuex";
 import router from "@/router";
 import ViewState from "@/components/ViewState.vue";
@@ -153,7 +183,7 @@ export default {
       return store;
     },
   },
-  components: {LeftNavigationBar, LoginDialog, ViewState, CircleCheckFilled, CashRegister },
+  components: {LeftNavigationBar, LoginDialog, ViewState, CircleCheckFilled, WarningFilled, InfoFilled, View },
   methods: {
     router() {
       return router;
@@ -163,9 +193,9 @@ export default {
     let loginVisible = ref(false);
     let store = useStore();
     const introduce = ref([
-      "双端次数同步",
+      "智能问答|Ai绘画|图床扩容",
       "全功能使用",
-      "(小程序)绘画自动保存",
+      "源码星球交易货币",
     ]);
     const payVisible = ref(false);
     const productList = ref([]);
@@ -175,6 +205,7 @@ export default {
     const mainPageVisible = ref(true);
     const showCover = ref(false);
     const showSucceed = ref(false);
+    const payying = ref(false);
 
     let load = ref(false);
     let empty = ref(false);
@@ -198,6 +229,7 @@ export default {
         error.value = true;
       }
     }
+
 
     async function getUser() {
       try {
@@ -229,21 +261,23 @@ export default {
         //构建支付宝订单
         outcome.value = await alipayPayQrCode(productId.value);
         payVisible.value = false;
+        payying.value = true;
         mainPageVisible.value = false;
+        window.open(outcome.value.payUrl, '_blank');
         //3秒检查一下订单是否支付成功
         let timerId = setInterval(async function () {
           let res = await alipayIsSucceed(outcome.value.ordersId);
-
-          if (res === "PAID") {
+          if (res === "success") {
             ElNotification({
               title: "成功",
               message: "赞赏成功，可在我的赞赏中查看该赞赏记录",
               type: "success",
             });
+            payying.value = false;
             showSucceed.value = true;
             await getUser();
             clearInterval(timerId);
-          } else if (res === "IS_CLOSED") {
+          } else if (res === "cancel") {
             showCover.value = true;
             ElNotification({
               title: "订单已关闭",
@@ -287,6 +321,7 @@ export default {
       payType,
       loginVisible,
       productFrequency,
+      payying,
     };
   },
 };
@@ -440,10 +475,157 @@ export default {
 
 .surplus {
   margin: 10px;
-  color: #7c7c7c;
+  color: var(--textColor2);
 }
 
 .aiwarning {
   color: #ffffff;
+}
+
+.payment-status-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bgColor2);
+  animation: fadeIn 0.3s ease;
+}
+
+.status-content {
+  background: var(--bgColor1);
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 90%;
+
+  h1 {
+    color: var(--textColor1);
+    font-size: 24px;
+    margin: 20px 0;
+  }
+
+  &.success {
+    .success-text {
+      color: var(--textColor2);
+      margin: 16px 0 24px;
+    }
+  }
+}
+
+.icon-wrapper {
+  margin-bottom: 20px;
+  
+  .el-icon {
+    font-size: 64px;
+    
+    &.warning {
+      color: #e6a23c;
+    }
+    
+    &.success {
+      color: #67c23a;
+      animation: scaleIn 0.5s ease;
+    }
+  }
+}
+
+.warning-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fdf6ec;
+  color: #e6a23c;
+  padding: 12px 20px;
+  border-radius: 6px;
+  margin: 20px 0;
+
+  .el-icon {
+    font-size: 18px;
+  }
+}
+
+.status-info {
+  margin-top: 30px;
+  color: var(--textColor2);
+}
+
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+  
+  span {
+    width: 8px;
+    height: 8px;
+    background: var(--themeColor1);
+    border-radius: 50%;
+    animation: dot-pulse 1.5s infinite;
+    
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
+}
+
+.view-button {
+  margin-top: 20px;
+  padding: 12px 30px;
+  
+  .el-icon {
+    margin-right: 6px;
+  }
+}
+
+@keyframes dot-pulse {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .status-content {
+    padding: 30px 20px;
+    
+    h1 {
+      font-size: 20px;
+    }
+  }
+  
+  .warning-box {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
 }
 </style>

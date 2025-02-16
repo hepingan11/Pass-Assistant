@@ -33,7 +33,7 @@
         <el-tag
             color="#8166e7"
             effect="dark">
-          剩余SUPER币 {{ store.getters.userinfo.frequency }}
+          剩余IT币 {{ store.getters.userinfo.frequency }}
         </el-tag>
       </div>
     </div>

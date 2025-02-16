@@ -22,7 +22,7 @@
     >
       <el-table-column prop="ordersId" label="订单号" />
       <el-table-column prop="productName" label="商品名称" />
-      <el-table-column prop="frequency" label="Ai币" />
+      <el-table-column prop="frequency" label="IT币" />
       <el-table-column prop="payTime" label="支付时间" />
       <el-table-column prop="productPrice" label="商品价格" />
       <el-table-column prop="state" label="支付状态" />

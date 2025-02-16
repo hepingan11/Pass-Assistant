@@ -1,17 +1,17 @@
 import axios from 'axios'
 
+
 // TODO 请求取消令牌列表
 export let cancelArr = [];
 
-// TODO 创建axios实例
-const service = axios.create({
-    baseURL: process.env.VUE_APP_BASE_API,
-    timeout: 6 * 60 * 1000
-});
-
+//创建axios实例，如果不创建实例也可以直接更改axios.defaults.baseURL
+const api = axios.create({
+    baseURL: 'http://127.0.0.1:5000',
+    timeout: 6 * 60 * 1000,
+})
 
 // TODO 请求拦截器
-service.interceptors.request.use(config => {
+api.interceptors.request.use(config => {
     // TODO 请求头
     config.headers['token'] = localStorage.getItem('token')
 
@@ -26,21 +26,22 @@ service.interceptors.request.use(config => {
 });
 
 // TODO 响应拦截器
-service.interceptors.response.use(response => {
+api.interceptors.response.use(response => {
     const res = response.data;
-    if (res.code !== 200) {
-        if (res.code === 401) {
+    if (response.status !== 200) {
+        if (response.status === 401) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             location.reload();
         } else {
-            throw res.msg
+            throw '服务器内部出现问题了？'
         }
     } else {
-        return res.data
+        return res
     }
 }, () => {
     throw 'AI服务调用失败，正在紧急处理，请稍后使用。'
 })
 
-export default service
+export default api
+

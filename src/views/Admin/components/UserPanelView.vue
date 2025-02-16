@@ -20,9 +20,20 @@
         border: 'none',
       }"
     >
+      <el-table-column label="头像" width="80">
+        <template #default="scope">
+          <el-avatar 
+            :size="40" 
+            :src="scope.row.avatar ? imageUrl + scope.row.avatar : ''"
+            @error="handleAvatarError"
+          >
+            <el-icon><UserFilled /></el-icon>
+          </el-avatar>
+        </template>
+      </el-table-column>
       <el-table-column prop="userId" label="标识" />
       <el-table-column prop="userName" label="昵称" />
-      <el-table-column prop="frequency" label="Ai币" />
+      <el-table-column prop="frequency" label="IT币" />
       <el-table-column prop="email" label="邮箱" />
       <el-table-column prop="lastOperationTime" label="最后操作时间" />
       <el-table-column prop="createdTime" label="创建时间" />
@@ -74,7 +85,7 @@
       </el-form-item>
     </el-form>
     <el-form>
-      <el-form-item label="Ai币" label-width="100px">
+      <el-form-item label="IT币" label-width="100px">
         <el-input
           autocomplete="off"
           style="width: 120px"
@@ -101,8 +112,8 @@ import {
   GetUserPage,
   UpdateUserInfo,
 } from "../../../../api/BSideApi";
-import { conversionTime } from "@/utils/date";
 import { ElLoading, ElNotification } from "element-plus";
+import { UserFilled } from '@element-plus/icons-vue'
 
 export default {
   name: "orderView",
@@ -127,6 +138,13 @@ export default {
       frequency: 0,
       userName: "",
     });
+    const imageUrl = process.env.VUE_APP_IMAGE || 'http://your-api-base-url/'  // 确保有正确的基础URL
+
+    // 添加头像加载错误处理函数
+    const handleAvatarError = () => {
+      return true // 使用默认头像
+    }
+
     onMounted(() => {
       if (store.getters.userinfo && store.getters.userinfo.type === "ADMIN") {
         getUserCount();
@@ -138,7 +156,7 @@ export default {
       if (!form.value.frequency) {
         ElNotification({
           title: "错误",
-          message: "Ai币格式不正确",
+          message: "IT币格式不正确",
           type: "error",
         });
         return;
@@ -218,9 +236,16 @@ export default {
             if (!r.lastOperationTime) {
               r.lastOperationTime = "7天前";
             } else {
-              r.lastOperationTime = conversionTime(r.lastOperationTime);
+              r.lastOperationTime = r.lastOperationTime.substring(0, 10);
             }
-            r.createdTime = conversionTime(r.createdTime);
+            if (!r.createdTime) {
+              r.createdTime = "--";
+            } else {
+              r.createdTime = r.createdTime.substring(0, 10);
+            }
+            if (!r.avatar || r.avatar === 'null' || r.avatar === 'undefined') {
+              r.avatar = null; // 设置为null以触发默认头像显示
+            }
           });
           dataTables.value = records;
           current.value = res.current;
@@ -251,6 +276,8 @@ export default {
       handleUpdateUserInfo,
       form,
       onUpdate,
+      imageUrl,
+      handleAvatarError,
     };
   },
 };
@@ -323,5 +350,24 @@ export default {
 /deep/.el-input__wrapper {
   background: var(--bgColor2);
   box-shadow: none;
+}
+
+::v-deep(.el-table) {
+  .el-avatar {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bgColor2);
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+    }
+    
+    .el-icon {
+      font-size: 20px;
+      color: var(--textColor2);
+    }
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="body" ref="scrollRef">
     <div v-if="!conversationList.length" class="explain">
-      <div style="display: flex">
+      <!-- <div style="display: flex">
         <div  style="margin-top: -15%;flex: 1;text-align: center">
           <el-image @click="router().push({ path: '/funny' })" style="border-radius: 10px;width: 20%;height: auto;min-width: 180px" class="top-img" src="https://img-hepingan.oss-cn-hangzhou.aliyuncs.com/page/e2a2c9dbde45ebf956b0b9a5483a9043.jpg"></el-image>
           <p @click="router().push({ path: '/funny' })" class="recommended-text">我的作品上新</p>
@@ -10,15 +10,15 @@
           <el-image @click="handle" style="border-radius: 10px;width: 20%;height: auto;min-width: 180px" class="top-img" src="https://img-hepingan.oss-cn-hangzhou.aliyuncs.com/page/b90972d0364169812ad4d4f4fccbf9da.jpg"></el-image>
           <p @click="handle" class="recommended-text">我的博客</p>
         </div>
-      </div>
+      </div> -->
 
-      <img class="logo" alt="Vue logo" src="../assets/passlogo.png"/>
+      <img class="logo" alt="Vue logo" src="../assets/logo.png"/>
       <div class="expositoryCase">欢迎使用-Pass Assistant</div>
       <div class="consume">
         <el-icon>
           <Goods/>
         </el-icon>
-        <div class="consumeText">每次提问消耗1个SUPER币</div>
+        <div class="consumeText">每次提问消耗1个IT币</div>
       </div>
       <div class="beCareful">请注意不支持违法、违规等不当信息内容</div>
     </div>
@@ -57,7 +57,7 @@
               class="flexShrink"
               :size="35"
               :icon="UserFilled"
-              :src="require('../assets/passlogo.png')"
+              :src="require('../assets/logo.png')"
           />
           <template v-if="item.assistant">
             <div style="width: 100%">
@@ -220,7 +220,7 @@
 </template>
 
 <script>
-import {h, nextTick, onMounted, ref} from "vue";
+import {h, nextTick, onBeforeUnmount, onMounted, ref} from "vue";
 import {
   ChatDotRound,
   ChatLineSquare,
@@ -285,15 +285,13 @@ export default {
     const rate = ref(50);
     const memory = ref(10);
     const size = ref(1000);
-    const open = () => {
-      ElNotification({
-        title: "网站提示",
-        message: h('i', { style: 'color: #8166e7' }, '该网站适配于PC端，手机端浏览该网站可能会影响体验，建议使用电脑或平板~'),
-      })
-    }
+    onBeforeUnmount(()=>{
+      const element = document.getElementById('my-element');
+      if (element) {
+        element.removeEventListener('resize', handleResize);
+      }
+    })
     onMounted(() => {
-      window.addEventListener("resize", handleResize);
-      open();
       handleResize();
       if (store.getters.userinfo) getUser();
       //获取图片域名
@@ -328,6 +326,7 @@ export default {
           );
         }
       }
+      window.addEventListener("resize", handleResize);
     });
 
     //提交内容的快捷键监听

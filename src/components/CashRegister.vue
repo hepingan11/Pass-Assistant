@@ -19,7 +19,7 @@
                 <img
                   class="cash-qc-img"
                   alt="支付宝扫一扫"
-                  :src="outcome.qrCode"
+                  src="outcome.qrCode"
                 />
                 <div class="cover-div" v-show="showCover">二维码已经失效</div>
               </div>

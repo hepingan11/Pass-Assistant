@@ -277,7 +277,7 @@
               "
             >
               <div style="font-size: 9px">
-                每次绘图消耗8个SUPER币
+                每次绘图消耗8个IT币
               </div>
               <div>
                 <el-button round color="var(--themeColor2)" @click="onSubmit" :loading="load===1">

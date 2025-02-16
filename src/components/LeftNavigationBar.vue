@@ -1,31 +1,21 @@
 <template>
   <div class="NavigationBar">
-    <div :class="controlDisplay?'leftNavigation':'leftNavigation_active'" v-if="isLeftMenu">
-      <el-avatar
-          class="headPortrait"
-          :size="70"
-          :icon="UserFilled"
-          :src="
-          store.getters.userinfo.avatar
-            ? imageUrl + store.getters.userinfo.avatar
-            : require('../assets/passlogo.png')
-        "
-      />
+    <div :class="controlDisplay ? 'leftNavigation' : 'leftNavigation_active'" v-if="isLeftMenu">
+      <el-avatar @click="router().push({ path: '/' })" class="headPortrait hover-scale" :size="70" :icon="UserFilled"
+        :src="store.getters.userinfo.avatar
+          ? imageUrl + store.getters.userinfo.avatar
+          : require('../assets/logo.png')
+          " />
       <div class="surplus" v-if="store.getters.userinfo">
-        SUPER币 {{ store.getters.userinfo.frequency }}
+        IT币 {{ store.getters.userinfo.frequency }}
       </div>
       <div v-else @click="loginVisible = true" class="loginBut">登录</div>
       <div class="header">
         <div class="switch-button">
-          <router-link
-              v-for="(item, index) in navigationList"
-              :key="index"
-              active-class="switch-active"
-              class="switch-item"
-              :to="item.to"
-          >
+          <router-link v-for="(item, index) in navigationList" :key="index" active-class="switch-active"
+            class="switch-item" :to="item.to">
             <el-icon>
-              <component :is="item.icon"/>
+              <component :is="item.icon" />
             </el-icon>
             <div class="switch-item-title">{{ item.title }}</div>
           </router-link>
@@ -33,57 +23,19 @@
       </div>
 
       <div class="bottom">
-        <el-popover
-            placement="top-start"
-            :width="400"
-            trigger="hover"
-        >
-          <template #reference>
-            <el-avatar
-                :size="40"
-                :icon="UserFilled"
-                :src="require('../assets/hh.jpg')"
-            />
-          </template>
-            <div
-                class="demo-rich-conent"
-                style="display: flex; gap: 16px; flex-direction: column">
-              <h2>
-                更新日志
-                <el-icon><ChatLineRound /></el-icon>
-              </h2>
-              <p style="margin: 0;">
-                1.0.0基于Time sea作者开源项目进行搭建,并修改了logo等;
-                <span style="font-size: 10px;color: #7c7c7c">--2024.2.6</span>
-              </p>
-              <p style="margin: 0">
-                2.0.0对整体项目进行二次大改造，SD Ai绘画魔改，预设角色增多，新增数字人平台|个人中心|我的博客,删掉了claude和必应,此作品入围全高计设赛国赛;
-                <span style="font-size: 10px;color: #7c7c7c">--2024.5.1</span>
-              </p>
-              <p style="margin: 0">
-                2.1.0上新外链推荐,控制台新增外链管理；
-                <span style="font-size: 10px;color: #7c7c7c">--2024.6.6</span>
-              </p>
-              <p style="margin: 0">
-                2.2.0新增我们学校的智慧派斯和大数据专区,通过python爬取数据,从此项目变三端(Java,Vue,Python)；
-                <span style="font-size: 10px;color: #7c7c7c">--2024.6.17</span>
-              </p>
-              <p style="margin: 0">
-                2.3.0新增我的作品|图床模块|对应管理模块;
-                <span style="font-size: 10px;color: #7c7c7c">--2024.9.7</span>
-              </p>
-              <p style="margin: 0">
-                2.4.0修复完善Sd绘画，可控制开启Sd绘画，项目bug数减为0;
-                <span style="font-size: 10px;color: #7c7c7c">--2024.9.9</span>
-              </p>
-            </div>
-        </el-popover>
-        <div class="bottomRight">
-          <div class="bottomRightName">PASS Assistant</div>
-          <div class="bottomRightEdition">v2.3.0 2024.9.8</div>
+        <el-avatar 
+          :size="40" 
+          :icon="UserFilled" 
+          :src="require('../assets/hh.jpg')" 
+          @click="router().push({ path: '/about' })" 
+          class="bottom-avatar hover-scale"
+        />
+        <div class="bottomRight hover-bright">
+          <div class="bottomRightName">Pass Assistant</div>
+          <div class="bottomRightEdition">v3.0.0 2025.2.16</div>
         </div>
       </div>
-      <div class="control-display" @click="controlDisplay=!controlDisplay">
+      <div class="control-display" @click="controlDisplay = !controlDisplay">
         {{ controlDisplay ? '隐藏' : '显示' }}
       </div>
     </div>
@@ -91,28 +43,20 @@
       <RouterView v-slot="{ Component }">
         <!-- TODO 要缓存 -->
         <KeepAlive>
-          <component
-              :is="Component"
-              :key="$route.name"
-              v-if="$route.meta.keepAlive"
-          ></component>
+          <component :is="Component" :key="$route.name" v-if="$route.meta.keepAlive"></component>
         </KeepAlive>
         <!-- TODO 不缓存 -->
-        <component
-            :is="Component"
-            :key="$route.name"
-            v-if="!$route.meta.keepAlive"
-        ></component>
+        <component :is="Component" :key="$route.name" v-if="!$route.meta.keepAlive"></component>
       </RouterView>
     </div>
   </div>
 
-  <LoginDialog :show="loginVisible" @close="loginVisible = false"/>
+  <LoginDialog :show="loginVisible" @close="loginVisible = false" />
 </template>
 
 <script>
-import {defineComponent, onMounted, ref, watch} from "vue";
-import {useRouter} from "vue-router";
+import { defineComponent, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 // eslint-disable-next-line no-unused-vars
 import {
   ChatDotSquare, Iphone,
@@ -156,11 +100,6 @@ export default defineComponent({
         to: "/app",
       },
       {
-        title: "预设角色",
-        icon: Odometer,
-        to: "/preset_character",
-      },
-      {
         title: "我的收藏",
         icon: MessageBox,
         to: "/collection",
@@ -169,11 +108,6 @@ export default defineComponent({
         title: "超级实验室",
         icon: ScaleToOriginal,
         to: "/laboratory",
-      },
-      {
-        title: "图床",
-        icon: PictureFilled,
-        to: "/photo_view"
       },
       {
         title: "外链模块",
@@ -185,14 +119,14 @@ export default defineComponent({
 
 
     watch(
-        () => router.currentRoute.value,
-        (newValue) => {
-          isHeadNavigation.value = newValue.meta.isHeadNavigation;
-          isLeftMenu.value = newValue.meta.isLeftMenu;
-        },
-        {
-          immediate: true,
-        }
+      () => router.currentRoute.value,
+      (newValue) => {
+        isHeadNavigation.value = newValue.meta.isHeadNavigation;
+        isLeftMenu.value = newValue.meta.isLeftMenu;
+      },
+      {
+        immediate: true,
+      }
     );
     const imageUrl = ref("");
     onMounted(() => {
@@ -294,6 +228,7 @@ export default defineComponent({
 .headPortrait {
   display: block;
   margin: 50px auto 0;
+  background-color: var(--bgColor1);
 }
 
 .surplus {
@@ -403,5 +338,34 @@ export default defineComponent({
   .leftNavigation {
     display: none;
   }
+}
+
+.hover-scale {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.hover-scale:hover {
+  transform: scale(1.1);
+}
+
+.bottom-avatar {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.hover-bright {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hover-bright:hover {
+  filter: brightness(1.2);
+  transform: translateX(5px);
 }
 </style>
