@@ -1,0 +1,10 @@
+spring:
+  config:
+    import: nacos:pa-common-prod.yml
+  application:
+    name: pa-common
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yml

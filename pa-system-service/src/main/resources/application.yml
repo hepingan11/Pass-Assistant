@@ -1,0 +1,21 @@
+spring:
+
+  config:
+    import:
+      - optional:nacos:pa-system-service-prod.yml
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yml
+        shared-configs:
+          - data-id: pa-common-prod.yml  # 共享配置ID
+            group: DEFAULT_GROUP       # 配置分组（默认即可）
+            refresh: true              # 支持动态刷新
+  application:
+    name: pa-system-service
+
+
+
