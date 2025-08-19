@@ -1,6 +1,9 @@
 package top.hepingan.paaiservice.service;
 
 
+import reactor.core.publisher.Flux;
+import top.hepingan.pacommon.dto.MessageDto;
+import top.hepingan.pacommon.entity.ConversationUser;
 import top.hepingan.pacommon.entity.SpringAiChatMemory;
 
 import java.util.List;
@@ -14,5 +17,11 @@ import java.util.List;
 public interface ChatService {
 
 
-    List<SpringAiChatMemory> getHistory(String chatId,Integer pageNum);
+    List<SpringAiChatMemory> getHistory(String chatId);
+
+    void deleteHistory(String chatId);
+
+    List<ConversationUser> conversationList();
+
+    Flux<String> aiChat(MessageDto messageDto);
 }

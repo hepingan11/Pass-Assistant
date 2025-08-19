@@ -6,21 +6,23 @@ package top.hepingan.pacommon.constants;
  */
 public interface AiModelConstant {
 
-    String GPT = "gpt-4o-2024-08-06";
+    String GPT = "gpt-5";
+
+    String CLAUDE = "claude-sonnet-4-20250514";
+
+    String QWEN = "qwen-plus";
 
     String DEEPSEEK = "deepseek-chat";
 
-    String GLM = "glm-4v-plus-0111";
+    String DEEPSEEK_R = "deepseek-reasoner";
 
-    String DEEPSEEK_R = "deepseek-r1";
-
-    String DOUBAO = "doubao-1.5-pro-32k-250115";
-
-    String CLAUDE  = "claude-3-7-sonnet-20250219";
+    String GLM = "glm-4.5v";
 
     String GEMINI = "gemini-2.5-flash";
 
     String GROK = "grok-3";
+
+    String DOUBAO = "doubao-seed-1-6-250615";
 
 }
 
