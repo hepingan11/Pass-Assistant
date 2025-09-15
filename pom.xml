@@ -13,6 +13,7 @@
         <module>pa-system-service</module>
         <module>pa-ai-service</module>
         <module>pa-tools-service</module>
+        <module>pa-common</module>
         <module>pa-gateway-service</module>
     </modules>
 
