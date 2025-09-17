@@ -1,0 +1,143 @@
+spring:
+  ai:
+    #mcp
+    mcp:
+      client:
+        request-timeout: 60000
+        sse:
+          connections:
+            amap:
+              url: https://mcp.amap.com
+              sse-endpoint: /sse?key=
+        type: async
+    openai:
+      base-url: https://sg.uiuiapi.com
+      api-key: sk-
+      chat:
+        options:
+          model: gpt-5
+    zhipuai:
+      api-key:
+    chat:
+      memory:
+        repository:
+          jdbc:
+            platform: mysql
+            initialize-schema: never
+  data:
+    # redis配置
+    redis:
+      database: 1
+      host: 127.0.0.1
+      port: 6379
+      password: ''
+  # mysql配置
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/super_bot?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&useSSL=true
+    username: root
+    password: 123456
+  # 邮箱
+  mail:
+    host: smtp.qq.com
+    username: 1641436566@qq.com
+    password: ''
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+    port: 587
+
+
+# 超级管理员账号密码
+root:
+  # 邮箱
+  email: admin
+  # 密码
+  password: '123456'
+
+# 阿里OSS
+ali-oss:
+  endpoint: 'oss-cn-hangzhou.aliyuncs.com'
+  accessKey: ''
+  secretKey: ''
+  bucketName: 'img-'
+  domain: 'https://img-.oss-cn-hangzhou.aliyuncs.com'
+
+# GPT 对话助手配置
+gpt:
+  # 开发者名称
+  author: '何平安'
+  # BOT 中文名
+  botNameChinese: '何平安'
+  # BOT 英文名
+  botNameEnglish: 'HEPINGAN'
+
+bilibili:
+  uid: '303399'
+
+
+
+
+hupijiao:
+  appid: ''
+  appsecret: ''
+  webUrl: 'https://hepingan.top'
+
+# 支付宝配置
+ali-pay:
+  # 支付宝应用ID
+  appId: ''
+  # 支付宝公钥
+  alipayPublicKey:
+  # 私钥
+  privateKey:
+  # 域名
+  domain: 'https://hepingan.top'
+
+#以下配置的东西 不是不填 这里只是默认配置 也可以部署完毕后自行去后台中配置
+
+#server默认配置，会被redis覆盖
+config:
+  # 配置
+  openKey: 'sk-'
+  #deepseek的key
+  deepseekKey: "sk-"
+  #tongyikey
+  tongyiKey: ""
+  #claude key
+  claudeKey: 'sk-'
+  #智谱清言key
+  glmKey: "."
+  # 用户第一次登录奖励次数
+  incentiveFrequency: 10
+  # 观看视频奖励次数
+  videoFrequency: 1
+  # GPT文生图消耗次数
+  gptTextImageFrequency: 5
+  #GPT消耗次数
+  gptFrequency: 1
+  # 观看视频奖励次数
+  signInFrequency: 1
+  #  链接顶图
+  linkTopImg: ""
+
+# 默认终端配置
+control:
+  # 代理ip 只支持 clash
+  proxyIp: 127.0.0.1
+  # 代理端口
+  proxyPort: 7890
+  # 敏感词
+  sensitiveWords: "(CHAT|GPT|OPEN|OPENAI)"
+  # 是否开启敏感词过滤
+  enableSensitive: true
+  # 是否开启GPT-4 不开启则 所有流量指向GPT-3模型
+  enableGptPlus: true
+  # 是否开启代理了
+  enableProxy: false
+

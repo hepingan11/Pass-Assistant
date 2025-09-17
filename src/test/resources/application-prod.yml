@@ -1,0 +1,141 @@
+server:
+  #   SSL证书
+  ssl:
+    key-store: classpath:aigc.rmmr.tech.pfx
+    key-store-password: uqsvmg920oc6vrx
+    key-store-type: JKS
+
+spring:
+  data:
+    # redis配置
+    redis:
+      database: 1
+      host: 127.0.0.1
+      port: 6379
+      password:
+  # mysql配置
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/super_bot?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&useSSL=true
+    username:
+    password:
+  # 邮箱
+  mail:
+    host: smtp.qq.com
+    username: @qq.com
+    password: ''
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+    port: 587
+
+# 微信
+we-chat:
+  # APPID
+  appId: ''
+  # 密钥
+  secret: ''
+  # 通知模板
+  template: '-cT6r0U'
+
+
+# 超级管理员账号密码
+root:
+  # 邮箱
+  email: admin
+  # 密码
+  password: 123456
+
+# 百度翻译
+baidu-translation:
+  # 百度翻译Appid
+  appid: ''
+  # 百度翻译密码要
+  secret: ''
+
+# 阿里OSS
+ali-oss:
+  endpoint: ''
+  accessKey: ''
+  secretKey: ''
+  bucketName: ''
+  domain: ''
+
+# GPT 对话助手配置
+gpt:
+  # 开发者名称
+  author: '何平安'
+  # BOT 中文名
+  botNameChinese: '何平安'
+  # BOT 英文名
+  botNameEnglish: 'HEPINGAN'
+
+
+
+# 支付宝配置
+ali-pay:
+  # 支付宝应用ID
+  appId: ''
+  # 支付宝公钥
+  alipayPublicKey: '123'
+  # 私钥
+  privateKey: ''
+  # 域名
+  domain: 'https://hepingan.top'
+
+# 默认服务器配置 以下非必填
+
+config:
+  #基本openAiUrl 基本和增强的URL可以一致
+  openAiUrl: ''
+  #增强openAiUrl
+  openAiPlusUrl: ''
+  # SD API
+  sdUrl: ''
+  # 配置
+  openKey: ''
+  # GPT-4
+  openPlusKey: ''
+  # 用户第一次登录奖励次数
+  incentiveFrequency: 10
+  # 观看视频奖励次数
+  videoFrequency: 1
+  # SD消耗次数
+  sdImageFrequency: 5
+  # GPT文生图消耗次数
+  gptTextImageFrequency: 5
+  #GPT消耗次数
+  gptFrequency: 1
+  #GPT消耗次数
+  gptPlusFrequency: 20
+  # 观看视频奖励次数
+  signInFrequency: 1
+  # claude
+  organizationUuid: '3eead2bb-e6b8-49c1-aad4-2bec4e62c709'
+  # 连ID
+  conversationUuid: '082e1205-2081-456a-a0ae-9ea06cc6dc59'
+  # sessionKey
+  sessionKey: 'a'
+  # 必应Cookie
+  newBingCookie: '必应Cookie'
+
+# 默认终端配置
+control:
+  # 代理ip 只支持 clash
+  proxyIp: 127.0.0.1
+  # 代理端口
+  proxyPort: 7890
+  # 敏感词
+  sensitiveWords: "(CHAT|GPT|OPEN|OPENAI)"
+  # 是否开启敏感词过滤
+  enableSensitive: true
+  # 是否开启GPT-4 不开启则 所有流量指向GPT-3模型
+  enableGptPlus: false
+  # 是否开启代理了
+  enableProxy: false
+
